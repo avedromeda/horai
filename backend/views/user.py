@@ -1,7 +1,7 @@
 from typing import List
 from flask.json import jsonify
 from backend import db
-from backend.authenticate import gen_auth_token, is_authenticated
+from backend.authenticate import gen_auth_token, is_admin, is_authenticated
 from backend.models.user import User
 from flask import Blueprint, request, session
 
@@ -23,8 +23,7 @@ def login():
         if user.check_password(password):
             # Generate JWT
             return jsonify({
-                "jwt": gen_auth_token(user.id),
-                "user_id": user.id
+                "jwt": gen_auth_token(user.id)
             }), 200
         
         # Wrong password
@@ -75,6 +74,7 @@ def create():
 
 
 @bp.route("/list", methods=["GET"])
+@is_admin
 @is_authenticated
 def list_(): 
     users: List[User] = User.query.all()

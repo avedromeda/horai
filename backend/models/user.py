@@ -19,6 +19,7 @@ class User(db.Model):
 
     verified_email = db.Column(db.Boolean, default=False)
     premium_features = db.Column(db.Boolean, default=False)
+    admin_features = db.Column(db.Boolean, default=False)
 
     subjects = relationship("Subject", back_populates="user")
     notes = relationship("Note", back_populates="user")
@@ -46,5 +47,6 @@ class User(db.Model):
             "id": self.id,
             "name": self.name,
             "verified_email": self.verified_email,
-            "premium_features": self.premium_features
+            "premium_features": self.premium_features,
+            "admin_features": self.admin_features
         }

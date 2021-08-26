@@ -2,7 +2,7 @@ import time
 from functools import wraps
 
 import jwt
-from flask import current_app, request, session
+from flask import current_app, request, g
 from flask.json import jsonify
 from jwt.exceptions import InvalidSignatureError, InvalidTokenError
 
@@ -30,7 +30,7 @@ def check_auth_token(token: str) -> int:
         id = int(result.get("user_id"))
         user = User.query.filter_by(id=id).first()
         if user:
-            return user.id
+            return user
         
         return None
 
@@ -39,15 +39,37 @@ from . import app
 # Setup pre-request filters
 @app.before_request
 def user_auth_check():
-    session["user"] = check_auth_token(request.headers.get("X-Authenticate"))
+    g.user = check_auth_token(request.headers.get("X-Authenticate"))
 
 
 # Setup is authenticated check
 def is_authenticated(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if session["user"] is None:
+        if g.user is None:
             return jsonify({"error": "You must be authenticated to do this"}), 403
+        
+        return f(*args, **kwargs)
+    
+    return decorated
+
+
+def is_premium(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if g.user is None or not g.user.premium_features:
+            return jsonify({"error": "You must be premium to do this"}), 403
+        
+        return f(*args, **kwargs)
+    
+    return decorated
+
+    
+def is_admin(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if g.user is None or not g.user.admin_features:
+            return jsonify({"error": "You must be admin to do this"}), 403
         
         return f(*args, **kwargs)
     
