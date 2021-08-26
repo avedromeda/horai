@@ -1,5 +1,4 @@
 from typing import List
-from flask.json import jsonify
 from backend import db
 from backend.authenticate import gen_auth_token, is_admin, is_authenticated
 from backend.models.user import User
@@ -12,7 +11,7 @@ bp = Blueprint("user", __name__)
 def login():
     # If already logged in, just pass by
     if session["user"] is not None:
-        return jsonify({}), 200
+        return {}, 200
     
     email = request.form.get("email")
     password = request.form.get("password")
@@ -22,15 +21,15 @@ def login():
         # Check password
         if user.check_password(password):
             # Generate JWT
-            return jsonify({
+            return {
                 "jwt": gen_auth_token(user.id)
-            }), 200
+            }, 200
         
         # Wrong password
-        return jsonify({"error": "Incorrect details"}), 403
+        return {"error": "Incorrect details"}, 403
     
     # User not found
-    return jsonify({"error": "That user does not exist"}), 400
+    return {"error": "That user does not exist"}, 400
 
 
 @bp.route("/create", methods=["POST"])
@@ -42,21 +41,21 @@ def create():
 
     # Ensure data isn't empty
     if any(val.strip() == "" for val in [name, email, password]):
-        return jsonify({
+        return {
             "error": "Information can not be empty"
-        }), 400
+        }, 400
 
     # Make sure account doesn't exist already
     user = User.query.filter_by(email=email).first()
     if user:
-        return jsonify({
+        return {
             "error": "This account already exists"
-        }), 403
+        }, 403
     
     if password != confirm_password:
-        return jsonify({
+        return {
             "error": "These passwords do not match"
-        }), 403
+        }, 403
 
     user = User(
         name=name,
@@ -68,9 +67,9 @@ def create():
     db.session.add(user)
     db.session.commit()
 
-    return jsonify({
+    return {
         "jwt": gen_auth_token(user.id)
-    })
+    }
 
 
 @bp.route("/list", methods=["GET"])
@@ -82,4 +81,4 @@ def list_():
     for user in users:
         data_users.append(user.to_dict())
     
-    return jsonify({"users": data_users}), 200
+    return {"users": data_users}

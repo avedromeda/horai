@@ -1,0 +1,5 @@
+sqlalchemy
+pyjwt
+Flask
+Flask-SQLAlchemy
+Flask-RESTful

@@ -3,7 +3,6 @@ from functools import wraps
 
 import jwt
 from flask import current_app, request, g
-from flask.json import jsonify
 from jwt.exceptions import InvalidSignatureError, InvalidTokenError
 
 from backend.models.user import User
@@ -47,7 +46,7 @@ def is_authenticated(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if g.user is None:
-            return jsonify({"error": "You must be authenticated to do this"}), 403
+            return {"error": "You must be authenticated to do this"}, 403
         
         return f(*args, **kwargs)
     
@@ -58,7 +57,7 @@ def is_premium(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if g.user is None or not g.user.premium_features:
-            return jsonify({"error": "You must be premium to do this"}), 403
+            return {"error": "You must be premium to do this"}, 403
         
         return f(*args, **kwargs)
     
@@ -69,7 +68,7 @@ def is_admin(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if g.user is None or not g.user.admin_features:
-            return jsonify({"error": "You must be admin to do this"}), 403
+            return {"error": "You must be admin to do this"}, 403
         
         return f(*args, **kwargs)
     
