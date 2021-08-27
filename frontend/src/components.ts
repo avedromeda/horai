@@ -25,7 +25,7 @@ String.prototype.formatUnicorn = String.prototype.formatUnicorn ||
 /* tslint:enable */
 
 
-function loadDOMComponents(parent?: JQuery) {
+export function loadDOMComponents(parent?: JQuery) {
     ($(parent || "*" as any) as any).find("[data-component]").each(function (index: number) {
         $(this).load("components/" + $(this).attr("data-component"), function () {
             // Allow components to load child components
@@ -36,21 +36,17 @@ function loadDOMComponents(parent?: JQuery) {
 }
 
 
-function loadBareComponent(name: string) {
+export function loadBareComponent(name: string) {
     const element = $("<div></div>");
     element.load("components/" + name);
     return element;
 }
 
 
-function component(name: string, ...variables: any[]) {
+export function component(name: string, ...variables: any[]) {
     const element = loadBareComponent(name);
 
     element.html(element.html().formatUnicorn(...variables));
 
     return element;
 }
-
-$(document).ready(() => {
-    loadDOMComponents()
-});

@@ -2,7 +2,7 @@ import API from "./api";
 import APIChild from "./child"
 
 
-interface IUser {
+export interface IUser {
     id: number,
     name: string,
     verified_email: boolean,

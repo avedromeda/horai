@@ -1,5 +1,6 @@
 import APIAuth from "./auth";
 import APIError from "./error";
+import APISubject from "./subject";
 
 
 const API_ENDPOINT = "http://localhost:80/"
@@ -8,10 +9,12 @@ const API_ENDPOINT = "http://localhost:80/"
 export default class API {
     jwt: string;
     auth: APIAuth;
+    subject: APISubject;
     constructor() {
         this.jwt = null;
 
         this.auth = new APIAuth(this);
+        this.subject = new APISubject(this);
     }
 
     async createRequest(route: string, method: string, body?: BodyInit) {
