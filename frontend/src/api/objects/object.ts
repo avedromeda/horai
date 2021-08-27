@@ -2,7 +2,7 @@ import APIChild from "../child";
 
 export default class APIObject extends APIChild {
     data: any;
-    
+
     path(): string {
         return "";
     }
