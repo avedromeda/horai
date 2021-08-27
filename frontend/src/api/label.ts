@@ -1,8 +1,6 @@
 import API from "./api";
 import APIChild from "./child"
 import { ILabel } from "./objects/label";
-import { INote } from "./objects/note";
-import { ISubject } from "./objects/subject";
 
 
 export interface ILabelProps {
@@ -15,7 +13,7 @@ export default class APILabel extends APIChild {
         super(api);
     }
 
-    async all(): Promise<INote[]> {
+    async all(): Promise<ILabel[]> {
         const response = await this.createRequest(
             this.createEndpoint("labels"), "GET"
         )
@@ -35,11 +33,19 @@ export default class APILabel extends APIChild {
         return await this.validateResponse(response);
     }
 
-    async get(labelId: number): Promise<INote> {
+    async get(labelId: number): Promise<ILabel> {
         const response = await this.createRequest(
             this.createEndpoint("label", labelId.toString()), "GET"
         )
 
         return await this.validateResponse(response);
+    }
+
+    async delete(labelId: number) {
+        const response = await this.createRequest(
+            this.createEndpoint("label", labelId.toString()), "DELETE"
+        )
+
+        await this.validateResponse(response);
     }
 }

@@ -38,4 +38,12 @@ export default class APISubject extends APIChild {
 
         return await this.validateResponse(response);
     }
+
+    async delete(subjectId: number) {
+        const response = await this.createRequest(
+            this.createEndpoint("subject", subjectId.toString()), "DELETE"
+        )
+
+        await this.validateResponse(response);
+    }
 }

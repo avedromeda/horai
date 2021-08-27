@@ -43,4 +43,12 @@ export default class APINote extends APIChild {
 
         return await this.validateResponse(response);
     }
+
+    async delete(subjectId: number, noteId: number) {
+        const response = await this.createRequest(
+            this.createEndpoint("subject", subjectId.toString(), "note", noteId.toString()), "DELETE"
+        )
+
+        await this.validateResponse(response);
+    }
 }
