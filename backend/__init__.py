@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
-
+from flask_cors import CORS
 
 app = None
 api = None
@@ -12,6 +12,7 @@ def create_app(config = "config.py"):
     
     # Setup Flask
     app = Flask(__name__)
+    CORS(app)
     app.config.from_pyfile(config)
     db = SQLAlchemy(app)
     api = Api(app)

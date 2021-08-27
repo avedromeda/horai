@@ -2,7 +2,7 @@ from typing import List
 from backend import db
 from backend.authenticate import gen_auth_token, is_admin, is_authenticated
 from backend.models.user import User
-from flask import Blueprint, request, session
+from flask import Blueprint, request, g
 
 bp = Blueprint("user", __name__)
 
@@ -10,7 +10,7 @@ bp = Blueprint("user", __name__)
 @bp.route("/login", methods=["POST"])
 def login():
     # If already logged in, just pass by
-    if session["user"] is not None:
+    if g.user is not None:
         return {}, 200
     
     email = request.form.get("email")
@@ -82,3 +82,9 @@ def list_():
         data_users.append(user.to_dict())
     
     return {"users": data_users}
+
+
+@bp.route("/me", methods=["GET"])
+@is_authenticated
+def me():
+    return g.user.to_dict()
