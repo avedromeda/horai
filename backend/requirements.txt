@@ -3,4 +3,3 @@ pyjwt
 Flask
 Flask-SQLAlchemy
 Flask-RESTful
-Flask-CORS

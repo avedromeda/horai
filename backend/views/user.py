@@ -7,7 +7,7 @@ from flask import Blueprint, request, g
 bp = Blueprint("user", __name__)
 
 
-@bp.route("/login", methods=["POST"])
+@bp.route("/login/", methods=["POST"])
 def login():
     # If already logged in, just pass by
     if g.user is not None:
@@ -32,7 +32,7 @@ def login():
     return {"error": "That user does not exist"}, 400
 
 
-@bp.route("/create", methods=["POST"])
+@bp.route("/create/", methods=["POST"])
 def create():
     name = request.form.get("name", "")
     email = request.form.get("email", "")
@@ -72,7 +72,7 @@ def create():
     }
 
 
-@bp.route("/list", methods=["GET"])
+@bp.route("/list/", methods=["GET"])
 @is_admin
 @is_authenticated
 def list_(): 
@@ -84,7 +84,7 @@ def list_():
     return {"users": data_users}
 
 
-@bp.route("/me", methods=["GET"])
+@bp.route("/me/", methods=["GET"])
 @is_authenticated
 def me():
     return g.user.to_dict()
