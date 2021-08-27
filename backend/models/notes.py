@@ -5,12 +5,6 @@ from backend import db
 
 
 # M-N tables
-subject_notes = db.Table(
-    "subjects_notes",
-    db.Column("subject_id", db.Integer, db.ForeignKey("subjects.id"), primary_key=True),
-    db.Column("note_id", db.Integer, db.ForeignKey("notes.id"), primary_key=True),
-)
-
 notes_labels = db.Table(
     "notes_labels",
     db.Column("note_id", db.Integer, db.ForeignKey("notes.id"), primary_key=True),
@@ -26,8 +20,7 @@ class Subject(db.Model):
     name = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     user = relationship("User", back_populates="subjects")
-    
-    notes = relationship("Note", secondary=subject_notes)
+    notes = relationship("Note", back_populates="subject")
 
     def to_dict(self):
         return {
@@ -48,6 +41,9 @@ class Note(db.Model):
     content = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     user = relationship("User", back_populates="notes")
+
+    subject_id = db.Column(db.Integer, db.ForeignKey("subjects.id"))
+    subject = relationship("Subject", back_populates="notes")
     
     labels = relationship("Label", secondary=notes_labels)
     label_names = association_proxy("labels", "name")
@@ -61,7 +57,7 @@ class Note(db.Model):
             "labels": [
                 label.to_dict() for label in self.labels
             ],
-            "label_names": self.label_names
+            "label_names": list(self.label_names)
         }
 
 
