@@ -28,7 +28,8 @@ export default class API {
     }
 
     createEndpoint(...parts: string[]) {
-        return API_ENDPOINT + parts.join("/")
+        const endpoint = API_ENDPOINT + parts.join("/");
+        return endpoint + (endpoint.endsWith("/") ? "" : "/")
     }
 
     createForm(data: any) {
