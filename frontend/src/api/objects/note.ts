@@ -33,30 +33,12 @@ export default class Note extends APIObject {
     }
 
     async setTitle(title: string) {
-        const response = await this.createObjectRequest(
-            "PUT",
-            this.createForm({
-                title,
-                content: this.content
-            })
-        )
-
-        const data = await this.validateResponse(response);
-        this.data = data;
-        return data;
+        this.data.title = title;
+        return await this.update();
     }
 
     async setContent(content: string) {
-        const response = await this.createObjectRequest(
-            "PUT",
-            this.createForm({
-                title: this.title,
-                content: this.content
-            })
-        )
-
-        const data = await this.validateResponse(response);
-        this.data = data;
-        return data;
+        this.data.content = content;
+        return await this.update();
     }
 }

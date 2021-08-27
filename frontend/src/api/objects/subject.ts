@@ -31,15 +31,7 @@ export default class Subject extends APIObject {
     }
 
     async setName(name: string) {
-        const response = await this.createObjectRequest(
-            "PUT",
-            this.createForm({
-                name
-            })
-        )
-
-        const data = await this.validateResponse(response);
-        this.data = data;
-        return data;
+        this.data.name = name;
+        return await this.update();
     }
 }
