@@ -21,12 +21,14 @@ def create_app(config = "config.py"):
     db.create_all()
 
     # Load blueprints
-    from backend.views import user, subject, note
+    from backend.views import user, subject, note, label
     app.register_blueprint(user.bp, url_prefix='/user')
 
     api.add_resource(subject.SubjectList, '/subjects')
     api.add_resource(subject.SubjectResource, '/subject/<int:subject_id>')
     api.add_resource(note.NoteList, '/subject/<int:subject_id>/notes')
     api.add_resource(note.NoteResource, '/subject/<int:subject_id>/note/<int:note_id>')
+    api.add_resource(label.LabelList, '/labels')
+    api.add_resource(label.LabelResource, '/label/<int:label_id>')
 
     return app

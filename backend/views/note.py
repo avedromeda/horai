@@ -9,10 +9,13 @@ from flask_restful import Resource, reqparse
 note_parser = reqparse.RequestParser()
 note_parser.add_argument('title', type=str, required=True)
 note_parser.add_argument('content', type=str, required=True)
-note_parser.add_argument('label', type=int, required=True, action="append")
+note_parser.add_argument('label', type=int, required=False, action="append")
 
 
 def get_valid_labels(labels: List[int]):
+    if labels is None:
+        return []
+    
     return [
         label for label_id in labels
         if (label := Label.query.get(label_id))
