@@ -1,0 +1,12 @@
+.column-header {
+    min-height: 15vh;
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border-bottom: 1px solid #e0e0e0 !important;
+}
+
+.list-group-item-borderless {
+    border: none !important;
+}

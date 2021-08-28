@@ -31,7 +31,6 @@ export function loadDOMComponents(parent?: JQuery) {
             // Allow components to load child components
             loadDOMComponents(this);
         })
-
     })
 }
 
@@ -48,8 +47,6 @@ export function loadBareComponent(name: string): Promise<JQuery> {
 
 export async function component(name: string, ...variables: any[]) {
     const element = await loadBareComponent(name);
-
     element.html(element.html().formatUnicorn(...variables));
-
     return element;
 }

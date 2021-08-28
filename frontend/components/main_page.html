@@ -1,11 +1,30 @@
 <div class="row g-0 min-vh-100">
-    <div class="col-12 col-lg-3" id="subject-column">
-        <p>subjects</p>
+    <div class="col-12 col-lg-3 border d-flex flex-column align-items-stretch" id="subject-column">
+        <div class="column-header">
+            <div class="d-flex flex-row justify-content-between align-items-center mx-3">
+                <h2>Subjects</h2>
+                <a id="add-subject" role="button" class="btn text-primary btn-large flex-end"><i class="ri-add-circle-line"></i></a>
+            </div>
+        </div>
+        <ul class="list-group list-group-flush" id="subjects">
+
+        </ul>
     </div>
-    <div class="col-12 col-lg-3" id="note-column">
-        <p>notes</p>
+    <div class="col-12 col-lg-3 border d-flex flex-column align-items-stretch" id="note-column">
+        <div class="column-header">
+            <div class="d-flex flex-row justify-content-between align-items-center mx-3">
+                <h2>Notes</h2>
+                <a id="add-note" role="button" class="btn text-primary btn-large flex-end"><i class="ri-add-circle-line"></i></a>
+            </div>
+        </div>
+        <ul class="list-group list-group-flush" id="notes">
+            
+        </ul>
+        <div id="no-subject-selected" class="d-flex justify-content-center align-items-center h-100">
+            No subject selected
+        </div>
     </div>
-    <div class="col-12 col-lg-6" id="editing-column">
+    <div class="col-12 col-lg-6 border" id="editing-column">
         <div id="editor" data-component="editor.html"></div>
     </div>
 </div>

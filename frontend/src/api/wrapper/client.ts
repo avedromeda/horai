@@ -11,6 +11,10 @@ export default class Client {
         this.api = new API();
     }
 
+    isLoggedIn() {
+        return this.api.auth.isLoggedIn;
+    }
+
     async login(email: string, password: string) {
         await this.api.auth.login(email, password);
 
