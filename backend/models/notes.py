@@ -55,7 +55,7 @@ class Note(db.Model):
             "content": self.content,
             "user_id": self.user_id,
             "subject_id": self.subject_id,
-            "labels": [
+            "label": [
                 label.to_dict() for label in self.labels
             ],
             "label_names": list(self.label_names)

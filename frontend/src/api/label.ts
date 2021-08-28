@@ -1,8 +1,11 @@
 import API from "./api";
 import APIChild from "./child"
-import { ILabel } from "./objects/label";
 
-
+export interface ILabel {
+    id: number
+    name: string,
+    color: number
+}
 export interface ILabelProps {
     name: string,
     color: number

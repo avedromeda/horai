@@ -7,6 +7,10 @@ export default class APIObject extends APIChild {
         return "";
     }
 
+    get id() {
+        return this.data.id;
+    }
+
     async update() {
         const response = await this.createObjectRequest(
             "PUT",

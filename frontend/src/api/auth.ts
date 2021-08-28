@@ -33,7 +33,7 @@ export default class APIAuth extends APIChild {
         return data;
     }
 
-    async login(email: string, password: string) {
+    async login(email: string, password: string): Promise<IUser> {
         const response = await this.createRequest(
             this.createEndpoint("user", "login"), "POST",
             this.createForm({

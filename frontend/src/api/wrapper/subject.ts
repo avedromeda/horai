@@ -1,13 +1,9 @@
 import API from "../api";
-import Note, { INote } from "./note";
+import { ISubject } from "../subject";
+import Note from "./note";
 import APIObject from "./object";
 
-export interface ISubject {
-    id: number
-    name: string,
-    user_id: number,
-    notes: INote[]
-}
+
 
 export default class Subject extends APIObject {
     data: ISubject;
@@ -32,5 +28,9 @@ export default class Subject extends APIObject {
     async setName(name: string) {
         this.data.name = name;
         return await this.update();
+    }
+
+    async delete() {
+        await this.api.subject.delete(this.data.id);
     }
 }

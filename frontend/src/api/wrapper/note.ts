@@ -1,14 +1,9 @@
 import API from "../api";
-import APIChild from "../child";
+import { INote } from "../note";
+import Label from "./label";
 import APIObject from "./object";
 import Subject from "./subject";
 
-export interface INote {
-    id: number
-    title: string,
-    content: string,
-    user_id: number
-}
 
 export default class Note extends APIObject {
     data: INote;
@@ -28,6 +23,13 @@ export default class Note extends APIObject {
         return this.data.content;
     }
 
+    /**
+     * NOTE: IS ASYNC!
+     */
+    get labels() {
+        return Promise.all(this.data.label.map(labelId => this.api.label.get(labelId)));
+    }
+
     path() {
         return this.subject.path() + "/notes/" + this.data.id.toString() + "/";
     }
@@ -40,5 +42,23 @@ export default class Note extends APIObject {
     async setContent(content: string) {
         this.data.content = content;
         return await this.update();
+    }
+
+    async addLabel(label: Label) {
+        this.data.label.push(label.data.id);
+        return await this.update();
+    }
+
+    async removeLabel(label: Label) {
+        const idx = this.data.label.indexOf(label.data.id);
+        if (idx > -1) {
+            this.data.label.splice(idx, 1);
+        }
+
+        return await this.update();
+    }
+
+    async delete() {
+        await this.api.note.delete(this.subject.data.id, this.data.id);
     }
 }

@@ -1,8 +1,14 @@
 import API from "./api";
 import APIChild from "./child"
-import { INote } from "./objects/note";
-import { ISubject } from "./objects/subject";
+import { ISubject } from "./subject";
 
+export interface INote {
+    id: number
+    title: string,
+    content: string,
+    user_id: number,
+    label: number[]
+}
 
 export interface INoteProps {
     title: string,
