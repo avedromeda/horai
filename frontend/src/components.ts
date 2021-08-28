@@ -36,15 +36,18 @@ export function loadDOMComponents(parent?: JQuery) {
 }
 
 
-export function loadBareComponent(name: string) {
-    const element = $("<div></div>");
-    element.load("components/" + name);
-    return element;
+export function loadBareComponent(name: string): Promise<JQuery> {
+    return new Promise((resolve, reject) => {
+        const element = $("<div></div>");
+        element.load("components/" + name, () => {
+            resolve(element);
+        });
+    })
 }
 
 
-export function component(name: string, ...variables: any[]) {
-    const element = loadBareComponent(name);
+export async function component(name: string, ...variables: any[]) {
+    const element = await loadBareComponent(name);
 
     element.html(element.html().formatUnicorn(...variables));
 
