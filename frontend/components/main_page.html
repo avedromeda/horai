@@ -1,11 +1,11 @@
 <div class="row g-0 min-vh-100" id="main-row">
-    <div class="col-12 col-lg-3 border d-flex flex-column align-items-stretch min-vh-100" id="subject-column">
+    <div class="col-12 col-lg-3 border d-flex flex-column align-items-stretch min-vh-100 d-lg-block" id="subject-column">
         <div class="column-header">
             <div class="d-flex flex-row justify-content-between align-items-center mx-3">
                 <h2>Subjects</h2>
                 <div class="flex-end">
                     <a id="add-subject" role="button" class="btn text-primary"><i class="ri-add-circle-line"></i></a>
-                    <a id="delete-subject" role="button" class="btn text-danger"><i class="ri-delete-bin-line"></i></a>
+                    <a id="delete-subject" role="button" class="btn text-danger d-none d-lg-inline"><i class="ri-delete-bin-line"></i></a>
                 </div>
             </div>
         </div>
@@ -13,8 +13,9 @@
 
         </ul>
     </div>
-    <div class="col-12 col-lg-3 border d-flex flex-column align-items-stretch min-vh-100" id="note-column">
+    <div class="col-12 col-lg-3 border d-flex flex-column align-items-stretch min-vh-100 d-lg-block d-none" id="note-column">
         <div class="column-header">
+            <small class="mx-3" id="current-subject"></small>
             <div class="d-flex flex-row justify-content-between align-items-center mx-3">
                 <div>
                     <a id="go-to-subjects" role="button" class="btn text-primary d-lg-none"><i class="ri-arrow-left-s-line"></i></a>
@@ -22,7 +23,7 @@
                 </div>
                 <div class="flex-end">
                     <a id="add-note" role="button" class="btn text-primary"><i class="ri-add-circle-line"></i></a>
-                    <a id="delete-note" role="button" class="btn text-danger"><i class="ri-delete-bin-line"></i></a>
+                    <a id="delete-note" role="button" class="btn text-danger d-none d-lg-inline"><i class="ri-delete-bin-line"></i></a>
                 </div>
             </div>
         </div>
@@ -30,7 +31,7 @@
             
         </ul>
     </div>
-    <div class="col-12 col-lg-6 border min-vh-100" id="editing-column">
-        <div id="editor" data-component="editor.html"></div>
+    <div class="col-12 col-lg-6 border min-vh-100 d-lg-block d-none" id="editing-column">
+        <div id="editor" data-component="editor.html" class="d-flex flex-column h-100"></div>
     </div>
 </div>

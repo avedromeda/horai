@@ -1,18 +1,22 @@
 import Client from "./api/wrapper/client";
+import Note from "./api/wrapper/note";
+import Subject from "./api/wrapper/subject";
 import { Component } from "./components";
+import Editing, { addToolbarListener } from "./editor";
 
 
 let currentSubjectId: number;
 let currentNoteId: number;
+const editor = new Editing();
 
 function highlightActiveSubject() {
     $(".subject--action.active").removeClass("active");
-    $(".subject--action[data-id={0}]".formatUnicorn(currentSubjectId)).addClass("active");
+    $(".subject--action[data-id=\"{0}\"]".formatUnicorn(currentSubjectId)).addClass("active");
 }
 
 function highlightActiveNote() {
     $(".note--action.active").removeClass("active");
-    $(".note--action[data-id={0}]".formatUnicorn(currentNoteId)).addClass("active");
+    $(".note--action[data-id=\"{0}\"]".formatUnicorn(currentNoteId)).addClass("active");
 }
 
 async function refreshSubjectView(client: Client) {
@@ -22,14 +26,38 @@ async function refreshSubjectView(client: Client) {
 }
 
 function goToSubjects() {
-    $("#subject-column").addClass("d-block").removeClass("d-none d-lg-block");
-    $("#note-column").removeClass("d-block").addClass("d-none d-lg-block");
+    $("#subject-column").addClass("d-block").removeClass("d-none");
+    $("#note-column").removeClass("d-block").addClass("d-none");
 }
 
 function goToNotes() {
     // Change display focus...
-    $("#subject-column").removeClass("d-block").addClass("d-none d-lg-block");
-    $("#note-column").addClass("d-block").removeClass("d-none d-lg-block");
+    $("#subject-column").removeClass("d-block").addClass("d-none");
+    $("#editing-column").removeClass("d-block").addClass("d-none");
+    $("#note-column").addClass("d-block").removeClass("d-none");
+}
+
+function goToNote() {
+    // Change display focus...
+    $("#note-column").removeClass("d-block").addClass("d-none");
+    $("#editing-column").addClass("d-block").removeClass("d-none");
+}
+
+function headerSetCurrentSubject(subject: Subject) {
+    $("#current-subject").text(subject.name);
+}
+
+function headerSetCurrentNote(note: Note) {
+    $("#current-note").text(note.title);
+}
+
+function headerClearCurrentNote() {
+    $("#current-note").text("");
+}
+
+function headerClearCurrentSubject() {
+    headerClearCurrentNote();
+    $("#current-subject").text("");
 }
 
 export async function beginInteractions(client: Client) {
@@ -55,7 +83,6 @@ async function loadSubjects(client: Client) {
         }))
     }
 
-    console.log($(".subject--action"));
     $(".subject--action").on("click", function () {
         // Remove any active labels...
         const id = $(this).data("id");
@@ -65,6 +92,11 @@ async function loadSubjects(client: Client) {
         loadNotes(client, id);
         goToNotes();
     })
+
+    $(".subject--action .delete-this").on("click", function (event) {
+        event.stopPropagation();
+        deleteSubjectCallback(client, event, $(this).data("id"));
+    });
 }
 
 async function loadNotes(client: Client, subjectId: number) {
@@ -75,6 +107,7 @@ async function loadNotes(client: Client, subjectId: number) {
 
     const subject = await client.getSubject(subjectId);
     $("#notes").empty();
+    headerSetCurrentSubject(subject);
 
     for (const note of subject.notes) {
         $("#notes").append(await Component("note.html", {
@@ -91,13 +124,30 @@ async function loadNotes(client: Client, subjectId: number) {
         currentNoteId = id;
         highlightActiveNote();
 
-        // loadNote(client, id);
-    })
+        loadNote(client, id);
+        goToNote();
+    });
+
+    $(".note--action .delete-this").on("click", function (event) {
+        event.stopPropagation();
+        deleteNoteCallback(client, event, $(this).data("id"));
+    });
+}
+
+
+async function loadNote(client: Client, noteId: number) {
+    addToolbarListener(editor);
+    editor.destroyEditor();
+
+    const note = await (await client.getSubject(currentSubjectId)).getNote(noteId);
+    headerSetCurrentNote(note);
+    editor.createEditor(note);
 }
 
 
 function addListeners(client: Client) {
     $("#go-to-subjects").on("click", (event) => goToSubjects());
+    $("#go-to-notes").on("click", (event) => goToNotes());
 
     $("#add-subject").on("click", (event) => addSubjectCallback(client, event));
     $("#add-note").on("click", (event) => addNoteCallback(client, event));
@@ -126,26 +176,33 @@ function addNoteCallback(client: Client, event: JQuery.ClickEvent) {
     }
 }
 
-function deleteSubjectCallback(client: Client, event: JQuery.ClickEvent) {
-    if (currentSubjectId) {
+function deleteSubjectCallback(client: Client, event: JQuery.ClickEvent, subjectId?: number) {
+    const targetSubjectId = subjectId || currentSubjectId;
+    if (targetSubjectId) {
         bootbox.confirm("Are you sure you want to delete this subject and all of its notes?", async (result: boolean) => {
             if (result) {
-                await client.api.subject.delete(currentSubjectId);
+                await client.api.subject.delete(targetSubjectId);
                 currentSubjectId = null;
                 await refreshSubjectView(client);
             }
+
+            headerClearCurrentSubject();
         })
     }
 }
 
-function deleteNoteCallback(client: Client, event: JQuery.ClickEvent) {
-    if (currentNoteId) {
+function deleteNoteCallback(client: Client, event: JQuery.ClickEvent, noteId?: number) {
+    const targetNoteId = noteId || currentNoteId;
+    if (targetNoteId) {
         bootbox.confirm("Are you sure you want to delete this note?", async (result: boolean) => {
             if (result) {
-                await client.api.note.delete(currentSubjectId, currentNoteId);
+                editor.destroyEditor();
+                await client.api.note.delete(currentSubjectId, targetNoteId);
                 currentNoteId = null;
                 await refreshSubjectView(client);
             }
+
+            headerClearCurrentNote();
         })
     }
 }

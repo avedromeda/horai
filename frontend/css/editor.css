@@ -1,0 +1,35 @@
+.medium-editor-action:hover {
+    background-color: darkslategray;
+    color: white;
+}
+
+*.unselectable {
+   -moz-user-select: none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+
+   /*
+     Introduced in Internet Explorer 10.
+     See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+   */
+   -ms-user-select: none;
+   user-select: none;
+}
+
+
+.toolbar-button {
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toolbar-button:hover {
+    background-color: black;
+    color: white;
+}
+
+[contenteditable] {
+    outline: 0px solid transparent;
+}
