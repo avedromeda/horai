@@ -1,4 +1,5 @@
 import API from "../api";
+import { INoteProps } from "../note";
 import { ISubject } from "../subject";
 import Note from "./note";
 import APIObject from "./object";
@@ -23,6 +24,10 @@ export default class Subject extends APIObject {
 
     get notes() {
         return this.data.notes.map(inote => new Note(this.api, this, inote));
+    }
+
+    async createNote(note: INoteProps) {
+        return new Note(this.api, this, await this.api.note.create(this.id, note));
     }
 
     async setName(name: string) {

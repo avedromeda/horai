@@ -25,13 +25,28 @@ String.prototype.formatUnicorn = String.prototype.formatUnicorn ||
 /* tslint:enable */
 
 
-export function loadDOMComponents(parent?: JQuery) {
-    ($(parent || "*" as any) as any).find("[data-component]").each(function (index: number) {
-        $(this).load("components/" + $(this).attr("data-component"), function () {
-            // Allow components to load child components
-            loadDOMComponents(this);
-        })
-    })
+export async function loadDOMComponents(parent?: JQuery) {
+    // Load dom expected as list
+    const components = ($(parent || "*" as any) as JQuery).find("[data-component]").toArray();
+    const componentPromises: Promise<any>[] = [];
+
+    for (const component of components) {
+        const $component = $(component);
+        componentPromises.push(loadComponentElement($component.attr("data-component"), $component));
+        componentPromises.push(loadDOMComponents($component));
+    }
+
+    await Promise.all(componentPromises);
+    console.log("loaded")
+}
+
+
+export async function loadComponentElement(name: string, element: JQuery): Promise<JQuery> {
+    const component = await loadBareComponent(name);
+
+    element.replaceWith(component);
+
+    return element;
 }
 
 
@@ -45,7 +60,7 @@ export function loadBareComponent(name: string): Promise<JQuery> {
 }
 
 
-export async function component(name: string, ...variables: any[]) {
+export async function Component(name: string, ...variables: any[]) {
     const element = await loadBareComponent(name);
     element.html(element.html().formatUnicorn(...variables));
     return element;

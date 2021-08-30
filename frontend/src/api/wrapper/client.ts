@@ -41,6 +41,9 @@ export default class Client {
 
     async getSubjects(): Promise<Subject[]> {
         const data = await this.api.subject.all();
+
+        // Sort by ID
+        data.sort((a, b) => a.id - b.id);
         return data.map(isubject => new Subject(this.api, isubject));
     }
 

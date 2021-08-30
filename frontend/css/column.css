@@ -10,3 +10,7 @@
 .list-group-item-borderless {
     border: none !important;
 }
+
+#main-row > * {
+    max-height: 100vh;
+}

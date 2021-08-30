@@ -1,6 +1,5 @@
 import API from "./api";
 import APIChild from "./child"
-import { ISubject } from "./subject";
 
 export interface INote {
     id: number
@@ -29,7 +28,7 @@ export default class APINote extends APIChild {
         return (await this.validateResponse(response)).notes;
     }
 
-    async create(subjectId: number, { title, content, label }: INoteProps): Promise<ISubject> {
+    async create(subjectId: number, { title, content, label }: INoteProps): Promise<INote> {
         const response = await this.createRequest(
             this.createEndpoint("subject", subjectId.toString(), "notes"), "POST",
             this.createForm({
