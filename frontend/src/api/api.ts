@@ -59,11 +59,15 @@ export default class API {
     }
 
     async validateResponse(response: Response) {
-        const data = await response.json();
-        if (response.status < 400) {
-            return data;
+        if (response.status === 204) {
+            return {}
         } else {
-            throw new APIError(data, response.status)
+            const data = await response.json();
+            if (response.status < 400) {
+                return data;
+            } else {
+                throw new APIError(data, response.status)
+            }
         }
     }
 }
