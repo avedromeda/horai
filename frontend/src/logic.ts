@@ -60,8 +60,9 @@ function headerClearCurrentSubject() {
     $("#current-subject").text("");
 }
 
-function showInfo() {
-    bootbox.alert("You are using Horai.");
+function strip(html: string){
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
 }
 
 export async function beginInteractions(client: Client) {
@@ -116,7 +117,7 @@ async function loadNotes(client: Client, subjectId: number) {
     for (const note of subject.notes) {
         $("#notes").append(await Component("note.html", {
             title: note.title,
-            preview: note.content.slice(0, 20) || "No content",
+            preview: strip(note.content.slice(0, 20)) || "No content",
             id: note.id,
             subjectId: subject.id
         }))
@@ -152,7 +153,6 @@ async function loadNote(client: Client, noteId: number) {
 function addListeners(client: Client) {
     $("#go-to-subjects").on("click", (event) => goToSubjects());
     $("#go-to-notes").on("click", (event) => goToNotes());
-    $("#current-info").on("click", (event) => showInfo());
 
     $("#add-subject").on("click", (event) => addSubjectCallback(client, event));
     $("#add-note").on("click", (event) => addNoteCallback(client, event));

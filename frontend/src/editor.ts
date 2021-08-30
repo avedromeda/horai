@@ -2,6 +2,7 @@ import Note from "./api/wrapper/note";
 
 export default class Editing {
     editor: MediumEditor;
+    interval: number;
     constructor () {
         this.editor = null;
     }
@@ -72,15 +73,19 @@ export default class Editing {
 
         const that = this;
         this.editor.subscribe('editableInput', async (_event, _editable) => {
-            // Display last saved.
-            // const date = new Date();
-
-            // $("#last-saved").text("(last saved: " + date.toLocaleString() + ")");
-            // localStorage.setItem("content-" + that.currentNote, $("#target").html());
-            await note.setContent($("#target").html());
+            $("#saved").addClass("d-none").removeClass("d-block");
+            $("#not-saved").addClass("d-block").removeClass("d-none");
         });
 
-        // $("#not-editing").hide();
+        this.interval = setInterval(async () => {
+            const newContent =  $("#target").html();
+            if (note.content !== newContent) {
+                await note.setContent(newContent);
+            }
+
+            $("#not-saved").addClass("d-none").removeClass("d-block");
+            $("#saved").addClass("d-block").removeClass("d-none");
+        }, 5000) as unknown as number;
     }
 
     destroyEditor() {
@@ -91,6 +96,11 @@ export default class Editing {
 
             this.editor.destroy();
             this.editor = null;
+        }
+
+        if (this.interval !== null) {
+            clearInterval(this.interval);
+            this.interval = null;
         }
     }
 }
