@@ -31,7 +31,7 @@ export default class Note extends APIObject {
     }
 
     path() {
-        return this.subject.path() + "/notes/" + this.data.id.toString() + "/";
+        return this.subject.path() + "note/" + this.data.id.toString() + "/";
     }
 
     async setTitle(title: string) {

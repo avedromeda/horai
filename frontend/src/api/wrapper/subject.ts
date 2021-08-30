@@ -30,6 +30,10 @@ export default class Subject extends APIObject {
         return new Note(this.api, this, await this.api.note.create(this.id, note));
     }
 
+    async getNote(noteId: number) {
+        return new Note(this.api, this, await this.api.note.get(this.id, noteId));
+    }
+
     async setName(name: string) {
         this.data.name = name;
         return await this.update();
