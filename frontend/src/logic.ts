@@ -15,6 +15,23 @@ function highlightActiveNote() {
     $(".note--action[data-id={0}]".formatUnicorn(currentNoteId)).addClass("active");
 }
 
+async function refreshSubjectView(client: Client) {
+    await loadSubjects(client);
+    highlightActiveSubject();
+    await loadNotes(client, currentSubjectId);
+}
+
+function goToSubjects() {
+    $("#subject-column").addClass("d-block").removeClass("d-none d-lg-block");
+    $("#note-column").removeClass("d-block").addClass("d-none d-lg-block");
+}
+
+function goToNotes() {
+    // Change display focus...
+    $("#subject-column").removeClass("d-block").addClass("d-none d-lg-block");
+    $("#note-column").addClass("d-block").removeClass("d-none d-lg-block");
+}
+
 export async function beginInteractions(client: Client) {
     // Start logic here
     if (!client.isLoggedIn) {
@@ -46,11 +63,16 @@ async function loadSubjects(client: Client) {
         highlightActiveSubject();
 
         loadNotes(client, id);
+        goToNotes();
     })
 }
 
 async function loadNotes(client: Client, subjectId: number) {
     // Load subject
+    if (!subjectId) {
+        return $("#notes").empty();
+    }
+
     const subject = await client.getSubject(subjectId);
     $("#notes").empty();
 
@@ -75,8 +97,13 @@ async function loadNotes(client: Client, subjectId: number) {
 
 
 function addListeners(client: Client) {
+    $("#go-to-subjects").on("click", (event) => goToSubjects());
+
     $("#add-subject").on("click", (event) => addSubjectCallback(client, event));
     $("#add-note").on("click", (event) => addNoteCallback(client, event));
+
+    $("#delete-subject").on("click", (event) => deleteSubjectCallback(client, event));
+    $("#delete-note").on("click", (event) => deleteNoteCallback(client, event));
 }
 
 function addSubjectCallback(client: Client, event: JQuery.ClickEvent) {
@@ -89,12 +116,36 @@ function addSubjectCallback(client: Client, event: JQuery.ClickEvent) {
 }
 
 function addNoteCallback(client: Client, event: JQuery.ClickEvent) {
-    bootbox.prompt("Note title?", async (result: string) => {
-        if (result !== null) {
-            await (await client.getSubject(currentSubjectId)).createNote({ title: result, content: "", label: [] });
-            await loadSubjects(client);
-            highlightActiveSubject();
-            await loadNotes(client, currentSubjectId);
-        }
-    })
+    if (currentSubjectId) {
+        bootbox.prompt("Note title?", async (result: string) => {
+            if (result !== null) {
+                await (await client.getSubject(currentSubjectId)).createNote({ title: result, content: "", label: [] });
+                await refreshSubjectView(client);
+            }
+        })
+    }
+}
+
+function deleteSubjectCallback(client: Client, event: JQuery.ClickEvent) {
+    if (currentSubjectId) {
+        bootbox.confirm("Are you sure you want to delete this subject and all of its notes?", async (result: boolean) => {
+            if (result) {
+                await client.api.subject.delete(currentSubjectId);
+                currentSubjectId = null;
+                await refreshSubjectView(client);
+            }
+        })
+    }
+}
+
+function deleteNoteCallback(client: Client, event: JQuery.ClickEvent) {
+    if (currentNoteId) {
+        bootbox.confirm("Are you sure you want to delete this note?", async (result: boolean) => {
+            if (result) {
+                await client.api.note.delete(currentSubjectId, currentNoteId);
+                currentNoteId = null;
+                await refreshSubjectView(client);
+            }
+        })
+    }
 }
