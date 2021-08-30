@@ -60,6 +60,10 @@ function headerClearCurrentSubject() {
     $("#current-subject").text("");
 }
 
+function showInfo() {
+    bootbox.alert("You are using Horai.");
+}
+
 export async function beginInteractions(client: Client) {
     // Start logic here
     if (!client.isLoggedIn) {
@@ -148,6 +152,7 @@ async function loadNote(client: Client, noteId: number) {
 function addListeners(client: Client) {
     $("#go-to-subjects").on("click", (event) => goToSubjects());
     $("#go-to-notes").on("click", (event) => goToNotes());
+    $("#current-info").on("click", (event) => showInfo());
 
     $("#add-subject").on("click", (event) => addSubjectCallback(client, event));
     $("#add-note").on("click", (event) => addNoteCallback(client, event));
