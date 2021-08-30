@@ -20,7 +20,7 @@ class Subject(db.Model):
     name = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     user = relationship("User", back_populates="subjects")
-    notes = relationship("Note", back_populates="subject")
+    notes = relationship("Note", back_populates="subject", cascade="all, delete")
 
     def to_dict(self):
         return {

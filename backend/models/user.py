@@ -21,9 +21,9 @@ class User(db.Model):
     premium_features = db.Column(db.Boolean, default=False)
     admin_features = db.Column(db.Boolean, default=False)
 
-    subjects = relationship("Subject", back_populates="user")
-    notes = relationship("Note", back_populates="user")
-    labels = relationship("Label", back_populates="user")
+    subjects = relationship("Subject", back_populates="user", cascade="all, delete-orphan")
+    notes = relationship("Note", back_populates="user", cascade="all, delete-orphan")
+    labels = relationship("Label", back_populates="user", cascade="all, delete-orphan")
 
     def set_password(self, password: str = None):
         if password is None:
