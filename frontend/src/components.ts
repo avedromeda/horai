@@ -30,31 +30,34 @@ export async function loadDOMComponents(parent?: JQuery) {
     const components = ($(parent || "*" as any) as JQuery).find("[data-component]").toArray();
     const componentPromises: Promise<any>[] = [];
 
+
+    const loadComponentAndChildren = async ($component: JQuery) => {
+        await loadComponentElement($component.attr("data-component"), $component)
+        await loadDOMComponents($component);
+
+    }
+
     for (const component of components) {
         const $component = $(component);
-        componentPromises.push(loadComponentElement($component.attr("data-component"), $component));
-        componentPromises.push(loadDOMComponents($component));
+        componentPromises.push(loadComponentAndChildren($component));
     }
 
     await Promise.all(componentPromises);
-    console.log("loaded")
 }
 
 
 export async function loadComponentElement(name: string, element: JQuery): Promise<JQuery> {
-    const component = await loadBareComponent(name);
-
-    element.replaceWith(component);
+    await loadBareComponent(name, element);
 
     return element;
 }
 
 
-export function loadBareComponent(name: string): Promise<JQuery> {
+export function loadBareComponent(name: string, element?: JQuery): Promise<JQuery> {
     return new Promise((resolve, reject) => {
-        const element = $("<div></div>");
-        element.load("components/" + name, () => {
-            resolve(element);
+        const target = element ?? $("<div></div>");
+        target.load("components/" + name, () => {
+            resolve(target);
         });
     })
 }
