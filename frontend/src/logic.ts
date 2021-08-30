@@ -26,20 +26,20 @@ async function refreshSubjectView(client: Client) {
 }
 
 function goToSubjects() {
-    $("#subject-column").addClass("d-block").removeClass("d-none");
-    $("#note-column").removeClass("d-block").addClass("d-none");
+    $("#subject-column").addClass("d-flex").removeClass("d-none");
+    $("#note-column").removeClass("d-flex").addClass("d-none");
 }
 
 function goToNotes() {
     // Change display focus...
-    $("#subject-column").removeClass("d-block").addClass("d-none");
+    $("#subject-column").removeClass("d-flex").addClass("d-none");
     $("#editing-column").removeClass("d-block").addClass("d-none");
-    $("#note-column").addClass("d-block").removeClass("d-none");
+    $("#note-column").addClass("d-flex").removeClass("d-none");
 }
 
 function goToNote() {
     // Change display focus...
-    $("#note-column").removeClass("d-block").addClass("d-none");
+    $("#note-column").removeClass("d-flex").addClass("d-none");
     $("#editing-column").addClass("d-block").removeClass("d-none");
 }
 
