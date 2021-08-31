@@ -55,7 +55,10 @@ function handleLoginOrRegister(client: Client): Promise<Client> {
                 resolve(client);
             } catch (e) {
                 if (e instanceof APIError) {
-                    $("#login-error").text(e.message.error).show().delay(3000).hide();
+                    $("#login-error").text(e.message.error).show()
+                    setTimeout(() => {
+                        $("#login-error").hide()
+                    }, 3000);
                 }
             }
         });
@@ -72,7 +75,10 @@ function handleLoginOrRegister(client: Client): Promise<Client> {
                 resolve(client);
             } catch (e) {
                 if (e instanceof APIError) {
-                    $("#register-error").text(e.message.error).show().delay(3000).hide();
+                    $("#register-error").text(e.message.error).show()
+                    setTimeout(() => {
+                        $("#register-error").hide()
+                    }, 3000);
                 }
             }
         });
