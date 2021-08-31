@@ -99,6 +99,13 @@ async function loadSubjects(client: Client) {
     $(".subject--action").on("click", function () {
         // Remove any active labels...
         const id = $(this).data("id");
+        if (id !== currentSubjectId) {
+            editor.save().then(() => {
+                editor.destroyEditor();
+                headerClearCurrentNote();
+            });
+        }
+
         currentSubjectId = id;
         highlightActiveSubject();
 
