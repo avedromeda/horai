@@ -24,7 +24,7 @@ def login():
         if user.check_password(password):
             # Generate JWT
             resp = make_response()
-            resp.set_cookie("token", gen_auth_token(user.id), httponly=True)
+            resp.set_cookie("token", gen_auth_token(user.id), httponly=True, secure=True)
             return resp, 204
         
         # Wrong password
@@ -77,7 +77,7 @@ def create():
     db.session.commit()
 
     resp = make_response()
-    resp.set_cookie("token", gen_auth_token(user.id), httponly=True)
+    resp.set_cookie("token", gen_auth_token(user.id), httponly=True, secure=True)
     return resp, 204
 
 
