@@ -68,6 +68,11 @@ function showSavedInfo() {
     }
 }
 
+async function logout(client: Client) {
+    await client.logout();
+    location.reload();
+}
+
 function strip(html: string) {
     const doc = new DOMParser().parseFromString(html, 'text/html');
     return doc.body.textContent || "";
@@ -189,6 +194,7 @@ function addListeners(client: Client) {
     $("#delete-note").on("click", (event) => deleteNoteCallback(client, event));
 
     $("#saved").on("click", (event) => showSavedInfo());
+    $("#logout").on("click", (event) => logout(client));
 }
 
 function addSubjectCallback(client: Client, event: JQuery.ClickEvent) {

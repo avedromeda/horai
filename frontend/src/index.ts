@@ -1,10 +1,14 @@
-import API from "./api/api";
 import Client from "./api/wrapper/client";
-import Subject from "./api/wrapper/subject";
 import { loadDOMComponents } from "./components";
+import { beginInteractions } from "./logic";
+import { setupAndGetClient } from "./login";
 
 
-$(document).ready(() => {
-    loadDOMComponents();
+$(document).ready(async () => {
+    await loadDOMComponents();
 
+    const client = await setupAndGetClient();
+    $("#current-user").text(client.api.auth.dataMe.name);
+
+    await beginInteractions(client);
 });
