@@ -60,6 +60,14 @@ function headerClearCurrentSubject() {
     $("#current-subject").text("");
 }
 
+function showSavedInfo() {
+    if (editor.lastSaved) {
+        bootbox.alert("Your note was last uploaded at {0}".formatUnicorn(editor.lastSaved.toLocaleTimeString()))
+    } else {
+        bootbox.alert("Your note has not yet been saved. It is likely newly open, or there is no note currently being edited");
+    }
+}
+
 function strip(html: string) {
     const doc = new DOMParser().parseFromString(html, 'text/html');
     return doc.body.textContent || "";
@@ -172,6 +180,8 @@ function addListeners(client: Client) {
 
     $("#delete-subject").on("click", (event) => deleteSubjectCallback(client, event));
     $("#delete-note").on("click", (event) => deleteNoteCallback(client, event));
+
+    $("#saved").on("click", (event) => showSavedInfo());
 }
 
 function addSubjectCallback(client: Client, event: JQuery.ClickEvent) {

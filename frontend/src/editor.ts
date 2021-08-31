@@ -3,6 +3,7 @@ import Note from "./api/wrapper/note";
 export default class Editing {
     editor: MediumEditor;
     interval: number;
+    lastSaved: Date;
     constructor () {
         this.editor = null;
     }
@@ -80,8 +81,10 @@ export default class Editing {
         this.interval = setInterval(async () => {
             const newContent =  $("#target").html();
             if (note.content !== newContent) {
+                this.lastSaved = new Date();
                 await note.setContent(newContent);
             }
+
 
             $("#not-saved").addClass("d-none").removeClass("d-block");
             $("#saved").addClass("d-block").removeClass("d-none");
@@ -102,6 +105,8 @@ export default class Editing {
             clearInterval(this.interval);
             this.interval = null;
         }
+
+        this.lastSaved = null;
     }
 }
 
