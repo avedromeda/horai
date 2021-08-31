@@ -22,6 +22,10 @@ export default class Client {
         return new User(this.api, data);
     }
 
+    async logout() {
+        await this.api.auth.logout();
+    }
+
     async register(name: string, email: string, password: string, confirmPassword: string) {
         await this.api.auth.create(name, email, password, confirmPassword);
 

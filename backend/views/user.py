@@ -34,6 +34,13 @@ def login():
     return {"error": "That user does not exist"}, 400
 
 
+@bp.route("/logout/", methods=["POST"])
+def logout():
+    resp = make_response()
+    resp.delete_cookie("token")
+    return resp, 204
+
+
 @bp.route("/create/", methods=["POST"])
 def create():
     name = request.form.get("name", "")

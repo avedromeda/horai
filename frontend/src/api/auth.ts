@@ -46,6 +46,14 @@ export default class APIAuth extends APIChild {
         return data;
     }
 
+    async logout(): Promise<void> {
+        await this.createRequest(
+            this.createEndpoint("user", "login"), "POST"
+        )
+
+        return;
+    }
+
     async create(name: string, email: string, password: string, confirmPassword: string) {
         const response = await this.createRequest(
             this.createEndpoint("user", "create"), "POST",
