@@ -3,3 +3,4 @@ pyjwt
 Flask
 Flask-SQLAlchemy
 Flask-RESTful
+psycopg2
