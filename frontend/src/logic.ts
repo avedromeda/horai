@@ -60,7 +60,7 @@ function headerClearCurrentSubject() {
     $("#current-subject").text("");
 }
 
-function strip(html: string){
+function strip(html: string) {
     const doc = new DOMParser().parseFromString(html, 'text/html');
     return doc.body.textContent || "";
 }
@@ -102,6 +102,11 @@ async function loadSubjects(client: Client) {
         event.stopPropagation();
         deleteSubjectCallback(client, event, $(this).data("id"));
     });
+
+    $(".subject--action .edit-this").on("click", function (event) {
+        event.stopPropagation();
+        editSubjectCallback(client, event, $(this).data("id"));
+    });
 }
 
 async function loadNotes(client: Client, subjectId: number) {
@@ -137,6 +142,11 @@ async function loadNotes(client: Client, subjectId: number) {
         event.stopPropagation();
         deleteNoteCallback(client, event, $(this).data("id"));
     });
+
+    $(".note--action .edit-this").on("click", function (event) {
+        event.stopPropagation();
+        editNoteCallback(client, event, $(this).data("id"));
+    });
 }
 
 
@@ -157,6 +167,9 @@ function addListeners(client: Client) {
     $("#add-subject").on("click", (event) => addSubjectCallback(client, event));
     $("#add-note").on("click", (event) => addNoteCallback(client, event));
 
+    $("#edit-subject").on("click", (event) => editSubjectCallback(client, event));
+    $("#edit-note").on("click", (event) => editNoteCallback(client, event));
+
     $("#delete-subject").on("click", (event) => deleteSubjectCallback(client, event));
     $("#delete-note").on("click", (event) => deleteNoteCallback(client, event));
 }
@@ -175,6 +188,31 @@ function addNoteCallback(client: Client, event: JQuery.ClickEvent) {
         bootbox.prompt("Note title?", async (result: string) => {
             if (result !== null) {
                 await (await client.getSubject(currentSubjectId)).createNote({ title: result, content: "", label: [] });
+                await refreshSubjectView(client);
+            }
+        })
+    }
+}
+
+function editSubjectCallback(client: Client, event: JQuery.ClickEvent, subjectId?: number) {
+    const targetSubjectId = subjectId || currentSubjectId;
+    if (targetSubjectId) {
+        bootbox.prompt("New subject name?", async (result: string) => {
+            if (result !== null) {
+                await (await client.getSubject(targetSubjectId)).setName(result);
+                await loadSubjects(client);
+            }
+        });
+    }
+}
+
+function editNoteCallback(client: Client, event: JQuery.ClickEvent, noteId?: number) {
+    const targetNoteId = noteId || currentNoteId;
+    if (targetNoteId) {
+        bootbox.prompt("New note title?", async (result: string) => {
+            if (result !== null) {
+                const subject = await client.getSubject(currentSubjectId);
+                await (await subject.getNote(targetNoteId)).setTitle(result);
                 await refreshSubjectView(client);
             }
         })
