@@ -4,6 +4,7 @@ export default class Editing {
     editor: MediumEditor;
     interval: number;
     lastSaved: Date;
+    currentNote: Note;
     constructor () {
         this.editor = null;
     }
@@ -12,6 +13,7 @@ export default class Editing {
         $("#target").removeClass("d-none");
         $("#toolbar").removeClass("d-none");
 
+        this.currentNote = note;
         this.editor = new MediumEditor('#target', {
             toolbar: false, /* {
                 buttons: [
@@ -62,7 +64,7 @@ export default class Editing {
             autoLink: true
         });
 
-        const content = note.content;
+        const content = this.currentNote.content;
 
         if (content !== null) {
             // Load previous data
@@ -79,16 +81,20 @@ export default class Editing {
         });
 
         this.interval = setInterval(async () => {
-            const newContent =  $("#target").html();
-            if (note.content !== newContent) {
-                this.lastSaved = new Date();
-                await note.setContent(newContent);
-            }
+            await this.save();
 
 
             $("#not-saved").addClass("d-none").removeClass("d-block");
             $("#saved").addClass("d-block").removeClass("d-none");
         }, 5000) as unknown as number;
+    }
+
+    async save() {
+        const newContent = $("#target").html();
+        if (this.currentNote && this.currentNote.content !== newContent) {
+            this.lastSaved = new Date();
+            await this.currentNote.setContent(newContent);
+        }
     }
 
     destroyEditor() {
@@ -107,6 +113,7 @@ export default class Editing {
         }
 
         this.lastSaved = null;
+        this.currentNote = null;
     }
 }
 
