@@ -3,7 +3,7 @@ from functools import wraps
 
 import jwt
 from flask import current_app, request, g
-from jwt.exceptions import InvalidSignatureError, InvalidTokenError
+from jwt.exceptions import ExpiredSignatureError, InvalidSignatureError, InvalidTokenError
 
 from backend.models.user import User
 
@@ -15,18 +15,18 @@ def gen_auth_token(user_id: int, expire_time: float = 0) -> str:
         expire_time = time.time() + 24 * 60 * 60 * 31
 
     return jwt.encode(
-        {"user_id": str(user_id)}, current_app.config.get("JWT_SECRET"), algorithm="HS256"
+        {"sub": str(user_id), "exp": expire_time}, current_app.config.get("JWT_SECRET"), algorithm="HS256"
     )
 
 
 def check_auth_token(token: str) -> int:
     try:
         result = jwt.decode(token, current_app.config.get("JWT_SECRET"), algorithms=["HS256"])
-    except (InvalidTokenError, InvalidSignatureError):
+    except (InvalidTokenError, InvalidSignatureError, ExpiredSignatureError):
         return None
     else:
         # Check user exists
-        id = int(result.get("user_id"))
+        id = int(result.get("sub"))
         user = User.query.filter_by(id=id).first()
         if user:
             return user
@@ -38,7 +38,7 @@ from . import app
 # Setup pre-request filters
 @app.before_request
 def user_auth_check():
-    g.user = check_auth_token(request.headers.get("X-Authenticate"))
+    g.user = check_auth_token(request.cookies.get("token"))
 
 
 # Setup is authenticated check
@@ -49,7 +49,6 @@ def is_authenticated(f):
             return {"error": "You must be authenticated to do this"}, 403
         
         return f(*args, **kwargs)
-    
     return decorated
 
 

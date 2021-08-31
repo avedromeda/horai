@@ -9,14 +9,11 @@ const API_ENDPOINT = "http://localhost:80/api/"
 
 
 export default class API {
-    jwt: string;
     auth: APIAuth;
     subject: APISubject;
     note: APINote;
     label: APILabel;
     constructor() {
-        this.jwt = null;
-
         this.auth = new APIAuth(this);
         this.subject = new APISubject(this);
         this.note = new APINote(this);
@@ -26,10 +23,7 @@ export default class API {
     async createRequest(route: string, method: string, body?: BodyInit) {
         return await fetch(route, {
             method,
-            body,
-            headers: {
-                ["X-Authenticate"]: this.jwt
-            }
+            body
         })
     }
 

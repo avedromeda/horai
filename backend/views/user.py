@@ -1,4 +1,6 @@
 from typing import List
+
+from flask.helpers import make_response
 from backend import db
 from backend.authenticate import gen_auth_token, is_admin, is_authenticated
 from backend.models.user import User
@@ -21,9 +23,9 @@ def login():
         # Check password
         if user.check_password(password):
             # Generate JWT
-            return {
-                "jwt": gen_auth_token(user.id)
-            }, 200
+            resp = make_response()
+            resp.set_cookie("token", gen_auth_token(user.id), httponly=True)
+            return resp, 204
         
         # Wrong password
         return {"error": "Incorrect details"}, 403
@@ -67,9 +69,9 @@ def create():
     db.session.add(user)
     db.session.commit()
 
-    return {
-        "jwt": gen_auth_token(user.id)
-    }
+    resp = make_response()
+    resp.set_cookie("token", gen_auth_token(user.id), httponly=True)
+    return resp, 204
 
 
 @bp.route("/list/", methods=["GET"])

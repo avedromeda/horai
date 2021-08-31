@@ -43,8 +43,6 @@ export default class APIAuth extends APIChild {
         )
 
         const data = await this.validateResponse(response);
-        this.api.jwt = data.jwt;
-
         return data;
     }
 
@@ -60,8 +58,6 @@ export default class APIAuth extends APIChild {
         )
 
         const data = await this.validateResponse(response);
-        this.api.jwt = data.jwt;
-
         return data;
     }
 }
