@@ -4,8 +4,10 @@ from flask import Flask
 from flask.helpers import send_from_directory
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 app = None
+migrate = None
 api = None
 db = None
 
@@ -17,6 +19,7 @@ def create_app(config="config.py"):
     app = Flask(__name__)
     app.config.from_pyfile(config)
     db = SQLAlchemy(app)
+    migrate = Migrate(app, db)
     api = Api(app)
 
     # Load the database
