@@ -1,9 +1,9 @@
 import hashlib
 import os
-
-from sqlalchemy.orm import relationship
+from datetime import datetime
 
 from backend import db
+from sqlalchemy.orm import relationship
 
 
 class User(db.Model):
@@ -24,6 +24,10 @@ class User(db.Model):
     subjects = relationship("Subject", back_populates="user", cascade="all, delete-orphan")
     notes = relationship("Note", back_populates="user", cascade="all, delete-orphan")
     labels = relationship("Label", back_populates="user", cascade="all, delete-orphan")
+
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
+    
 
     def set_password(self, password: str = None):
         if password is None:
@@ -48,5 +52,7 @@ class User(db.Model):
             "name": self.name,
             "verified_email": self.verified_email,
             "premium_features": self.premium_features,
-            "admin_features": self.admin_features
+            "admin_features": self.admin_features,
+            "created_on": datetime.timestamp(self.created_on),
+            "updated_on": datetime.timestamp(self.updated_on)
         }

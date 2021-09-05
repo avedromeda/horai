@@ -6,7 +6,9 @@ export interface INote {
     title: string,
     content: string,
     user_id: number,
-    label: number[]
+    label: number[],
+    created_on: number,
+    updated_on: number
 }
 
 export interface INoteProps {
