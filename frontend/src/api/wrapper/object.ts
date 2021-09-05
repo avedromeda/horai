@@ -12,7 +12,7 @@ export default class APIObject extends APIChild {
     }
 
     get createdOn() {
-        return new Date(this.data.updated_on * 1000);
+        return new Date(this.data.created_on * 1000);
     }
 
     get updatedOn() {

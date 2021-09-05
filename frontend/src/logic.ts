@@ -146,7 +146,7 @@ async function loadNotes(client: Client, subjectId: number) {
             preview: strip(note.content.slice(0, 20)) || "No content",
             id: note.id,
             subjectId: subject.id,
-            updated: subject.updatedOn.toLocaleString()
+            updated: note.updatedOn.toLocaleString()
         }))
     }
 
