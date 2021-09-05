@@ -1,6 +1,8 @@
 import APIError from "./api/error";
 import Client from "./api/wrapper/client";
 
+const MAX_AGE = 2147483647;
+
 function welcomeToLogin() {
     $("#welcome-screen").addClass("d-none");
     $("#login-screen").removeClass("d-none");
@@ -20,7 +22,7 @@ export async function setupAndGetClient(): Promise<Client> {
         welcomeToLogin();
     } else {
         $("#continue").on("click", () => {
-            document.cookie = "welcomed=; Secure;"
+            document.cookie = `welcomed=; Secure; Max-Age=${MAX_AGE}`
             welcomeToLogin();
         });
     }
