@@ -23,11 +23,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
 
-.toolbar-button:hover {
-    background-color: black;
-    color: white;
+    &:hover {
+        background-color: black;
+        color: white;
+    }
 }
 
 [contenteditable] {

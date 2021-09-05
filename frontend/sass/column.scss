@@ -1,3 +1,5 @@
+@import "theme";
+
 .column-header {
     min-height: 15vh;
     background-color: whitesmoke;
@@ -5,6 +7,21 @@
     flex-direction: column;
     justify-content: flex-end;
     border-bottom: 1px solid #e0e0e0 !important;
+}
+
+#subject-column {
+    background-color: $primary;
+
+    .profile {
+        padding: 1rem;
+        height: 75px;
+        // border-bottom: 1px solid #919191;
+        margin-bottom: 1rem;
+
+        .name {
+            font-weight: 700;
+        }
+    }
 }
 
 .list-group-item-borderless {
