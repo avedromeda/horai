@@ -7,6 +7,7 @@ from backend.models.user import User
 from flask import Blueprint, request, g
 
 bp = Blueprint("user", __name__)
+MAX_AGE = 31 * 24 * 60 * 60 
 
 
 @bp.route("/login/", methods=["POST"])
@@ -24,7 +25,7 @@ def login():
         if user.check_password(password):
             # Generate JWT
             resp = make_response()
-            resp.set_cookie("token", gen_auth_token(user.id), httponly=True, secure=True)
+            resp.set_cookie("token", gen_auth_token(user.id), httponly=True, secure=True, max_age=MAX_AGE)
             return resp, 204
         
         # Wrong password
@@ -77,7 +78,7 @@ def create():
     db.session.commit()
 
     resp = make_response()
-    resp.set_cookie("token", gen_auth_token(user.id), httponly=True, secure=True)
+    resp.set_cookie("token", gen_auth_token(user.id), httponly=True, secure=True, max_age=MAX_AGE)
     return resp, 204
 
 

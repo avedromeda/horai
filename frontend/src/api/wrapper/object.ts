@@ -11,6 +11,14 @@ export default class APIObject extends APIChild {
         return this.data.id;
     }
 
+    get createdOn() {
+        return new Date(this.data.created_on * 1000);
+    }
+
+    get updatedOn() {
+        return new Date(this.data.updated_on * 1000);
+    }
+
     async update() {
         const response = await this.createObjectRequest(
             "PUT",

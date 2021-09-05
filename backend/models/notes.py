@@ -1,8 +1,8 @@
-from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.orm import relationship
+from datetime import datetime
 
 from backend import db
-
+from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm import relationship
 
 # M-N tables
 notes_labels = db.Table(
@@ -22,6 +22,10 @@ class Subject(db.Model):
     user = relationship("User", back_populates="subjects")
     notes = relationship("Note", back_populates="subject", cascade="all, delete")
 
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
+    
+
     def to_dict(self):
         return {
             "id": self.id,
@@ -29,7 +33,9 @@ class Subject(db.Model):
             "user_id": self.user_id,
             "notes": [
                 note.to_dict() for note in self.notes
-            ]
+            ],
+            "created_on": datetime.timestamp(self.created_on),
+            "updated_on": datetime.timestamp(self.updated_on)
         }
     
 
@@ -48,6 +54,10 @@ class Note(db.Model):
     labels = relationship("Label", secondary=notes_labels)
     label_names = association_proxy("labels", "name")
 
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
+    
+
     def to_dict(self):
         return {
             "id": self.id,
@@ -58,7 +68,9 @@ class Note(db.Model):
             "label": [
                 label.to_dict() for label in self.labels
             ],
-            "label_names": list(self.label_names)
+            "label_names": list(self.label_names),
+            "created_on": datetime.timestamp(self.created_on),
+            "updated_on": datetime.timestamp(self.updated_on)
         }
 
 
@@ -70,6 +82,9 @@ class Label(db.Model):
     color = db.Column(db.Integer, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     user = relationship("User", back_populates="labels")
+
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
     
     notes = relationship("Note", secondary=notes_labels)
 
@@ -78,5 +93,7 @@ class Label(db.Model):
             "id": self.id,
             "name": self.name,
             "color": self.color,
-            "user_id": self.user_id
+            "user_id": self.user_id,
+            "created_on": datetime.timestamp(self.created_on),
+            "updated_on": datetime.timestamp(self.updated_on)
         }
