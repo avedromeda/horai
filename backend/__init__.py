@@ -1,3 +1,5 @@
+__version__ = "0.1.2"
+
 import os
 
 from flask import Flask
