@@ -7,7 +7,9 @@ export interface IUser {
     name: string,
     verified_email: boolean,
     premium_features: boolean,
-    admin_features: boolean
+    admin_features: boolean,
+    created_on: number,
+    updated_on: number
 }
 
 export default class APIAuth extends APIChild {

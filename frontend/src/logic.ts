@@ -97,7 +97,8 @@ async function loadSubjects(client: Client) {
         $("#subjects").append(await Component("subject.html", {
             name: subject.name,
             note_count: subject.notes.length,
-            id: subject.id
+            id: subject.id,
+            updated: subject.updatedOn.toLocaleString()
         }))
     }
 
@@ -144,7 +145,8 @@ async function loadNotes(client: Client, subjectId: number) {
             title: note.title,
             preview: strip(note.content.slice(0, 20)) || "No content",
             id: note.id,
-            subjectId: subject.id
+            subjectId: subject.id,
+            updated: subject.updatedOn.toLocaleString()
         }))
     }
 

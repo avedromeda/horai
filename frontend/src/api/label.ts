@@ -4,7 +4,9 @@ import APIChild from "./child"
 export interface ILabel {
     id: number
     name: string,
-    color: number
+    color: number,
+    created_on: number,
+    updated_on: number
 }
 export interface ILabelProps {
     name: string,

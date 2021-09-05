@@ -7,7 +7,9 @@ export interface ISubject {
     id: number
     name: string,
     user_id: number,
-    notes: INote[]
+    notes: INote[],
+    created_on: number,
+    updated_on: number
 }
 
 export interface ISubjectProps {
