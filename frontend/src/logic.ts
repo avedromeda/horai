@@ -8,6 +8,7 @@ import Editing, { addToolbarListener } from "./editor";
 let currentSubjectId: number;
 let currentNoteId: number;
 const editor = new Editing();
+const options = { weekday: "short", year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" } as const;
 
 function highlightActiveSubject() {
     $(".subject--action.active").removeClass("active");
@@ -45,6 +46,7 @@ function goToNote() {
 
 function headerSetCurrentSubject(subject: Subject) {
     $("#current-subject").text(subject.name);
+    $("#current-subject-modified").text(subject.updatedOn.toLocaleString(undefined, options));
 }
 
 function headerSetCurrentNote(note: Note) {
@@ -98,7 +100,7 @@ async function loadSubjects(client: Client) {
             name: subject.name,
             note_count: subject.notes.length,
             id: subject.id,
-            updated: subject.updatedOn.toLocaleString()
+            updated: subject.updatedOn.toLocaleString(undefined, options)
         }))
     }
 
@@ -143,10 +145,10 @@ async function loadNotes(client: Client, subjectId: number) {
     for (const note of subject.notes) {
         $("#notes").append(await Component("note.html", {
             title: note.title,
-            preview: strip(note.content.slice(0, 20)) || "No content",
+            preview: strip(note.content) || "No content",
             id: note.id,
             subjectId: subject.id,
-            updated: subject.updatedOn.toLocaleString()
+            updated: note.updatedOn.toLocaleString(undefined, options)
         }))
     }
 

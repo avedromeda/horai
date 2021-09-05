@@ -1,24 +1,23 @@
 <div class="row g-0 min-vh-100" id="main-row">
-    <div class="col-12 col-lg-3 d-flex flex-column align-items-stretch min-vh-100 d-lg-flex shadow" id="subject-column">
+    <div class="col-12 col-lg-2 d-flex flex-column align-items-stretch min-vh-100 d-lg-flex shadow" id="subject-column">
         <div class="profile">
             <span class="name title" id="current-user"></span>
         </div>
-        <div class="d-flex flex-row justify-content-between align-items-center mx-3">
+        <div class="d-flex flex-row justify-content-between align-items-center px-3">
             <h5>All Subjects</h5>
         </div>
-        <ul class="item-list list-group overflow-auto flex-grow-1" id="subjects">
-        </ul>
-        
+        <div class="item-list overflow-auto flex-grow-1" id="subjects">
+        </div>
     </div>
-    <div class="col-12 col-lg d-flex flex-column align-items-stretch min-vh-100 d-lg-flex d-none mx-3" id="note-column">
+    <div class="col-12 col-lg-4 d-flex flex-column align-items-stretch min-vh-100 d-lg-flex d-none px-3" id="note-column">
         <h3 id="current-subject" class="pt-5 subject-note-title"></h3>
         <p id="current-subject-modified">Last modified</p>
 
         <a id="add-note" role="button" class="btn btn-primary">New <i class="ri-add-circle-line"></i></a>
-        <ul class="item-list list-group overflow-auto flex-grow-1" id="notes">
-        </ul>
+        <div class="item-list overflow-auto flex-grow-1" id="notes">
+        </div>
     </div>
-    <div class="col-12 col-lg-6 border min-vh-100 d-lg-block d-none" id="editing-column">
+    <div class="col-12 col-lg border min-vh-100 d-lg-block d-none" id="editing-column">
         <div id="editor" data-component="editor.html" class="d-flex flex-column h-100"></div>
     </div>
 </div>

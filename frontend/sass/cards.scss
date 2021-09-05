@@ -4,9 +4,9 @@
     padding: 10px;
     margin: 10px 0;
     
-    &::after {
-        height: 1px;
-        border-bottom: 1px solid rgb(146, 146, 146);
+    &:hover {
+        cursor: pointer;
+        background-color: lighten(whitesmoke, 1%);
     }
 
     .title {
@@ -15,6 +15,13 @@
 
     .updated {
         text-transform: uppercase;
+    }
+
+    .text {
+        font-size: small;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        width: 100%;
     }
 
     &.active {
