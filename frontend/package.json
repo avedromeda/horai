@@ -4,7 +4,7 @@
   "version": "0.3.0",
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
-    "build": "tsc",
+    "build": "tsc && sass sass:css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
