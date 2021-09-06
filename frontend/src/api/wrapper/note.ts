@@ -23,11 +23,8 @@ export default class Note extends APIObject {
         return this.data.content;
     }
 
-    /**
-     * NOTE: IS ASYNC!
-     */
-    get labels() {
-        return Promise.all(this.data.label.map(labelId => this.api.label.get(labelId)));
+    async getLabels() {
+        return Promise.all(this.data.label.map(async labelId => new Label(this.api, await this.api.label.get(labelId))));
     }
 
     path() {
@@ -49,8 +46,23 @@ export default class Note extends APIObject {
         return await this.update();
     }
 
+    async addLabelById(labelId: number) {
+        this.data.label.push(labelId);
+
+        return await this.update();
+    }
+
     async removeLabel(label: Label) {
         const idx = this.data.label.indexOf(label.data.id);
+        if (idx > -1) {
+            this.data.label.splice(idx, 1);
+        }
+
+        return await this.update();
+    }
+
+    async removeLabelById(labelId: number) {
+        const idx = this.data.label.indexOf(labelId);
         if (idx > -1) {
             this.data.label.splice(idx, 1);
         }

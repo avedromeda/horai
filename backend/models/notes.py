@@ -66,7 +66,7 @@ class Note(db.Model):
             "user_id": self.user_id,
             "subject_id": self.subject_id,
             "label": [
-                label.to_dict() for label in self.labels
+                label.id for label in self.labels
             ],
             "label_names": list(self.label_names),
             "created_on": datetime.timestamp(self.created_on),

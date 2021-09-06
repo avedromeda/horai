@@ -60,4 +60,9 @@ export default class Client {
         const data = await this.api.label.get(labelId);
         return new Label(this.api, data);
     }
+
+    async getLabels(): Promise<Label[]> {
+        const data = await this.api.label.all();
+        return data.map(ilabel => new Label(this.api, ilabel));
+    }
 }
