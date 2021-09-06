@@ -50,7 +50,7 @@ export default class APIAuth extends APIChild {
 
     async logout(): Promise<void> {
         await this.createRequest(
-            this.createEndpoint("user", "login"), "POST"
+            this.createEndpoint("user", "logout"), "POST"
         )
 
         return;
@@ -69,5 +69,14 @@ export default class APIAuth extends APIChild {
 
         const data = await this.validateResponse(response);
         return data;
+    }
+
+    async sendVerificationEmail() {
+        const response = await this.createRequest(
+            this.createEndpoint("user", "send-verify"), "POST"
+        )
+
+        await this.validateResponse(response)
+        return;
     }
 }
