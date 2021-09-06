@@ -1,12 +1,14 @@
+@import "theme";
+
 .item-list {
     .item {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        width: calc(100% - 10px);
-        height: 40px;
-        margin: 5px;
+        width: calc(100% - 1rem);
+        min-height: 40px;
+        margin: 0.5rem;
         padding: 9px;
         border-radius: 5px;
 
@@ -63,6 +65,7 @@
         &:hover {
             background-color: rgba(255, 255, 255, 0.534);
             cursor: pointer;
+
             .info {
                 display: none;
             }
@@ -74,6 +77,14 @@
 
         &.active {
             background-color: rgba(255, 255, 255, 0.705);
+        }
+
+        &--positive {
+            background-color: $positive;
+
+            &:hover {
+                background-color: lighten($color: $positive, $amount: 10);
+            }
         }
     }
 }
