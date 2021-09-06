@@ -56,6 +56,7 @@ export default class Horai {
         const note = await this.getNote();
         $("#current-note").text(note.title);
         $("#current-note-modified").text(note.updatedOn.toLocaleString(undefined, options));
+
         $("#editing-column").removeClass("invisible");
     }
 
@@ -90,16 +91,47 @@ export default class Horai {
         this.setCurrentSubjectDisplay();
 
         for (const note of subject.notes) {
-            $("#notes").append(await Component("note.html", {
+            const component = await Component("note.html", {
                 title: note.title,
                 preview: strip(note.content) || "No content",
                 id: note.id,
                 subjectId: subject.id,
                 updated: note.updatedOn.toLocaleString(undefined, options)
-            }))
+            })
+
+            // Add labels to module
+            const labels = await note.getLabels();
+            component.find(".labels").append(
+                ...await Promise.all(labels.map(async (label) => {
+                    return await Component("note-label.html", {
+                        label: label.name,
+                        color: label.color
+                    })
+                }))
+            );
+
+            $("#notes").append(component);
         }
 
         this.addNoteEventHandlers();
+    }
+
+    async loadLabelsIntoDOM() {
+        $("#current-note-labels").find(".label--action").remove();
+
+        const note = await this.getNote();
+        const labels = await note.getLabels();
+        $("#current-note-labels").append(
+            ...await Promise.all(labels.map(async (label) => {
+                return await Component("note-label-editable.html", {
+                    label: label.name,
+                    color: label.color,
+                    id: label.id
+                })
+            }))
+        );
+
+        this.addLabelEventHandlers();
     }
 
     async loadSubjectsIntoDOM() {
@@ -116,6 +148,40 @@ export default class Horai {
         }
 
         this.addSubjectEventHandlers();
+    }
+
+    addLabelEventHandlers() {
+        const that = this;
+        // Set up click listener
+        $(".label-delete").on("click", async function () {
+            const id = $(this).data("id");
+
+            const note = await that.getNote();
+            await note.removeLabelById(id);
+            that.loadLabelsIntoDOM();
+        });
+
+        $("#add-label").on("click", async () => {
+            const note = await that.getNote();
+            const labels = await that.client.getLabels();
+
+            bootbox.prompt({
+                title: "Pick a label to add",
+                inputType: "select",
+                inputOptions: [...labels.map(label => {
+                    return {
+                        text: label.name,
+                        value: label.id
+                    }
+                })],
+                callback: async (result: any) => {
+                    if (result) {
+                        await note.addLabelById(result);
+                        that.loadLabelsIntoDOM();
+                    }
+                }
+            })
+        })
     }
 
     addNoteEventHandlers() {
@@ -200,9 +266,11 @@ export default class Horai {
         addToolbarListener(this.editor);
         this.editor.destroyEditor();
 
-        const note = await (await this.client.getSubject(this.currentSubjectId)).getNote(this.currentNoteId);
-        this.setCurrentNoteDisplay();
+        const note = await this.getNote();
+        await this.setCurrentNoteDisplay();
         this.editor.createEditor(note);
+
+        await this.loadLabelsIntoDOM();
     }
 
     // Auth flow
@@ -212,6 +280,11 @@ export default class Horai {
     }
 
     // Data control
+    async removeLabelCallback(event: JQuery.ClickEvent, labelId: number) {
+        const note = await this.getNote();
+        await note.removeLabelById(labelId);
+    }
+
     addSubjectCallback(event: JQuery.ClickEvent) {
         bootbox.prompt("Subject name?", async (result: string) => {
             if (result !== null) {

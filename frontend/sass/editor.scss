@@ -33,3 +33,19 @@
 [contenteditable] {
     outline: 0px solid transparent;
 }
+
+#current-note-labels {
+    .badge {
+        display: flex;
+        align-items: center;
+        margin-right: 3px;
+    }
+
+    .label-delete {
+        cursor: pointer;
+    }
+    
+    #add-label {
+        cursor: pointer;
+    }
+}
