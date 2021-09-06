@@ -1,45 +1,38 @@
 <div class="row g-0 min-vh-100" id="main-row">
-    <div class="col-12 col-lg-3 border d-flex flex-column align-items-stretch min-vh-100 d-lg-flex" id="subject-column">
-        <div class="column-header">
-            <div class="d-flex d-lg-block justify-content-center">
-                <small class="mx-3">
-                    Hey there, <span id="current-user"></span>.
-                    <a href="#" id="logout">Log out</a>
-                </small>
-            </div>
-            <div class="d-flex flex-row justify-content-between align-items-center mx-3">
-                <h2>Subjects</h2>
-                <div class="d-flex flex-end">
-                    <a id="add-subject" role="button" class="btn text-primary"><i class="ri-add-circle-line"></i></a>
-                    <a id="edit-subject" role="button" class="btn text-primary d-none d-lg-inline"><i class="ri-edit-line"></i></a>
-                    <a id="delete-subject" role="button" class="btn text-danger d-none d-lg-inline"><i class="ri-delete-bin-line"></i></a>
-                </div>
+    <div class="col-12 col-lg-2 d-flex flex-column align-items-stretch min-vh-100 d-lg-flex shadow" id="subject-column">
+        <div class="header pt-5">
+            <h2>Horai</h2>
+            <p>Welcome to Horai</p>
+        </div>
+        <div class="d-flex flex-row justify-content-between align-items-center px-3">
+            <h5>All Subjects</h5>
+        </div>
+        <div class="item-list overflow-auto flex-grow-1" id="subjects">
+            <div data-component="create-subject.html"></div>
+        </div>
+        
+        <div class="profile">
+            <span class="name" id="current-user"></span>
+            <div class="d-flex d-lg-block w-100">
+                <a href="#" class="btn w-100" id="settings-btn">Settings <i class="ri-settings-5-line"></i></a>
+                <a href="#" class="btn btn-danger w-100" id="logout">Logout <i class="ri-logout-box-line"></i></a>
             </div>
         </div>
-        <ul class="list-group list-group-flush overflow-auto flex-grow-1" id="subjects">
-
-        </ul>
     </div>
-    <div class="col-12 col-lg-3 border d-flex flex-column align-items-stretch min-vh-100 d-lg-flex d-none" id="note-column">
-        <div class="column-header">
-            <div class="d-flex d-lg-block justify-content-center">
-                <small class="mx-3" id="current-subject"></small>   
-            </div>
-            <div class="d-flex flex-row justify-content-between align-items-center mx-3">
-                <a id="go-to-subjects" role="button" class="btn text-primary d-lg-none"><i class="ri-arrow-left-s-line"></i></a>
-                <h2>Notes</h2>
-                <div class="d-flex flex-end">
-                    <a id="add-note" role="button" class="btn text-primary"><i class="ri-add-circle-line"></i></a>
-                    <a id="edit-note" role="button" class="btn text-primary d-none d-lg-inline"><i class="ri-edit-line"></i></a>
-                    <a id="delete-note" role="button" class="btn text-danger d-none d-lg-inline"><i class="ri-delete-bin-line"></i></a>
-                </div>
-            </div>
+    <div class="col-12 col-lg-4 d-flex flex-column align-items-stretch min-vh-100 d-lg-flex d-none px-3 invisible" id="note-column">
+        <h3 id="current-subject" class="pt-5 subject-note-title"></h3>
+        <p id="current-subject-modified" class="text-muted"></p>
+        
+        <div class="w-100">
+            <a id="go-to-subjects" role="button" class="btn d-lg-none"><i class="ri-arrow-left-s-line"></i></a>
+            <a id="add-note" role="button" class="btn btn-success flex-grow-1">New note <i class="ri-add-circle-line"></i></a>
+            <a id="edit-subject" role="button" class="btn btn-primary flex-grow-1">Rename <i class="ri-edit-line"></i></a>
+            <a id="delete-subject" role="button" class="btn btn-danger flex-grow-1">Delete subject <i class="ri-delete-bin-line"></i></a>
         </div>
-        <ul class="list-group list-group-flush overflow-auto" id="notes">
-            
-        </ul>
+        <div class="item-list overflow-auto flex-grow-1 mt-1" id="notes">
+        </div>
     </div>
-    <div class="col-12 col-lg-6 border min-vh-100 d-lg-block d-none" id="editing-column">
+    <div class="col-12 col-lg border min-vh-100 d-lg-block d-none invisible" id="editing-column">
         <div id="editor" data-component="editor.html" class="d-flex flex-column h-100"></div>
     </div>
 </div>

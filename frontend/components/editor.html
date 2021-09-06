@@ -1,16 +1,18 @@
 <div class="column-header">
-    <div class="d-flex d-lg-block justify-content-center">
-        <small class="mx-3" id="current-note"></small>
-    </div>
-    <div class="d-flex flex-row justify-content-between align-items-center mx-3">
-        <a id="go-to-notes" role="button" class="btn text-primary d-lg-none"><i class="ri-arrow-left-s-line"></i></a>
-        <h2 class="d-inline d-lg-block">Note</h2>
-        <a href="#" id="not-saved" class="btn text-danger mb-0 d-none">
-            <i class="ri-cloud-off-line"></i>
-        </a>
-        <a href="#" id="saved" class="btn text-success mb-0 d-block">
-            <i class="ri-cloud-line"></i>
-        </a>
+    <div class="mx-3">
+        <h3 class="pt-5" id="current-note">Note</h3>
+        <p id="current-note-modified" class="text-muted"></p>
+        <div class="d-flex flex-row w-100">
+            <a id="go-to-notes" role="button" class="btn d-lg-none"><i class="ri-arrow-left-s-line"></i></a>
+            <a id="edit-note" role="button" class="btn btn-primary flex-grow-1">Rename <i class="ri-edit-line"></i></a>
+            <a id="delete-note" role="button" class="btn btn-danger"><i class="ri-delete-bin-line"></i></a>
+            <a href="#" id="not-saved" class="btn btn-danger mb-0 d-none">
+                <i class="ri-cloud-off-line"></i>
+            </a>
+            <a href="#" id="saved" class="btn btn-success mb-0 d-inline-flex">
+                <i class="ri-cloud-line"></i>
+            </a>
+        </div>
     </div>
 </div>
 <div class="row m-0 d-none" id="toolbar">

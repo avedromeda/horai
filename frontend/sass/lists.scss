@@ -1,0 +1,90 @@
+@import "theme";
+
+.item-list {
+    .item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: calc(100% - 1rem);
+        min-height: 40px;
+        margin: 0.5rem;
+        padding: 9px;
+        border-radius: 5px;
+
+        font-size: small;
+        
+        .name {
+            margin: 0;
+            float: left;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 70%;
+        }
+
+        .info {
+            margin: 0;
+            float: right;
+        }
+        
+        .actions {
+            display: none;
+            
+            &:hover {
+                display: block
+            }
+
+            * {
+                margin-right: 4px;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+
+            .delete {
+                text-decoration: none;
+                color: rgb(218, 51, 68);
+
+                &:hover {
+                    color: rgb(226, 123, 134)
+                }
+            }
+
+            .edit {
+                text-decoration: none;
+                color: #8fbaca;
+
+                &:hover {
+                    color: rgb(184, 231, 247);
+                }
+            }
+        }
+        
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.534);
+            cursor: pointer;
+
+            .info {
+                display: none;
+            }
+
+            .actions {
+                display: block;
+            }
+        }
+
+        &.active {
+            background-color: rgba(255, 255, 255, 0.705);
+        }
+
+        &--positive {
+            background-color: $positive;
+
+            &:hover {
+                background-color: lighten($color: $positive, $amount: 10);
+            }
+        }
+    }
+}

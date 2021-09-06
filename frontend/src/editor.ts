@@ -76,16 +76,15 @@ export default class Editing {
 
         const that = this;
         this.editor.subscribe('editableInput', async (_event, _editable) => {
-            $("#saved").addClass("d-none").removeClass("d-block");
-            $("#not-saved").addClass("d-block").removeClass("d-none");
+            $("#saved").addClass("d-none").removeClass("d-inline-flex");
+            $("#not-saved").addClass("d-inline-flex").removeClass("d-none");
         });
 
         this.interval = setInterval(async () => {
             await this.save();
 
-
-            $("#not-saved").addClass("d-none").removeClass("d-block");
-            $("#saved").addClass("d-block").removeClass("d-none");
+            $("#not-saved").addClass("d-none").removeClass("d-inline-flex");
+            $("#saved").addClass("d-inline-flex").removeClass("d-none");
         }, 5000) as unknown as number;
     }
 
