@@ -5,7 +5,7 @@ import APINote from "./note";
 import APISubject from "./subject";
 
 
-const API_ENDPOINT = "https://horai.yadamiel.com/api/"
+const API_ENDPOINT = "http://localhost:80/api/"
 
 
 export default class API {

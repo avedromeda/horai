@@ -160,28 +160,6 @@ export default class Horai {
             await note.removeLabelById(id);
             that.loadLabelsIntoDOM();
         });
-
-        $("#add-label").on("click", async () => {
-            const note = await that.getNote();
-            const labels = await that.client.getLabels();
-
-            bootbox.prompt({
-                title: "Pick a label to add",
-                inputType: "select",
-                inputOptions: [...labels.map(label => {
-                    return {
-                        text: label.name,
-                        value: label.id
-                    }
-                })],
-                callback: async (result: any) => {
-                    if (result) {
-                        await note.addLabelById(result);
-                        that.loadLabelsIntoDOM();
-                    }
-                }
-            })
-        })
     }
 
     addNoteEventHandlers() {
@@ -244,6 +222,7 @@ export default class Horai {
 
         $("#add-subject").on("click", (event) => this.addSubjectCallback(event));
         $("#add-note").on("click", (event) => this.addNoteCallback(event));
+        $("#add-label").on("click", (event) => this.addLabelCallback(event));
 
         $("#edit-subject").on("click", (event) => this.editSubjectCallback(event));
         $("#edit-note").on("click", (event) => this.editNoteCallback(event));
@@ -283,6 +262,28 @@ export default class Horai {
     async removeLabelCallback(event: JQuery.ClickEvent, labelId: number) {
         const note = await this.getNote();
         await note.removeLabelById(labelId);
+    }
+
+    async addLabelCallback(event: JQuery.ClickEvent) {
+        const note = await this.getNote();
+        const labels = await this.client.getLabels();
+
+        bootbox.prompt({
+            title: "Pick a label to add",
+            inputType: "select",
+            inputOptions: [...labels.map(label => {
+                return {
+                    text: label.name,
+                    value: label.id
+                }
+            })],
+            callback: async (result: any) => {
+                if (result) {
+                    await note.addLabelById(result);
+                    this.loadLabelsIntoDOM();
+                }
+            }
+        })
     }
 
     addSubjectCallback(event: JQuery.ClickEvent) {
