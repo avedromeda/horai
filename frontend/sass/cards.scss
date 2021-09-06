@@ -1,0 +1,30 @@
+@import "theme";
+
+.note-card {
+    padding: 10px;
+    margin: 10px 0;
+    
+    &:hover {
+        cursor: pointer;
+        background-color: lighten(whitesmoke, 1%);
+    }
+
+    .title {
+        color: $highlight;
+    }
+
+    .updated {
+        text-transform: uppercase;
+    }
+
+    .text {
+        font-size: small;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    &.active {
+        background-color: whitesmoke;
+    }
+}
