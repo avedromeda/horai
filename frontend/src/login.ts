@@ -5,16 +5,22 @@ const MAX_AGE = 2147483647;
 
 function welcomeToLogin() {
     $("#welcome-screen").addClass("d-none");
+    $("#email-screen").addClass("d-none");
     $("#login-screen").removeClass("d-none");
+    $("#main-content").addClass("d-none");
 }
 
 function loginToEmailVerify() {
-    $("#login-screen").addClass("d-none");
+    $("#welcome-screen").addClass("d-none");
     $("#email-screen").removeClass("d-none");
+    $("#login-screen").addClass("d-none");
+    $("#main-content").addClass("d-none");
 }
 
 function emailToMain() {
+    $("#welcome-screen").addClass("d-none");
     $("#email-screen").addClass("d-none");
+    $("#login-screen").addClass("d-none");
     $("#main-content").removeClass("d-none");
 }
 
@@ -110,8 +116,6 @@ function handleEmailVerification(client: Client) {
             try {
                 await client.sendVerificationEmail();
                 $("#email-info").text("An email was sent at {0}".formatUnicorn((new Date()).toLocaleString()))
-
-                document.cookie = "token=; Secure;";
             } catch (e) {
                 if (e instanceof APIError) {
                     $("#email-error").text(e.message.error).show()
