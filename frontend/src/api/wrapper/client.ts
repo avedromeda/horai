@@ -26,6 +26,10 @@ export default class Client {
         await this.api.auth.logout();
     }
 
+    async sendVerificationEmail() {
+        await this.api.auth.sendVerificationEmail();
+    }
+
     async register(name: string, email: string, password: string, confirmPassword: string) {
         await this.api.auth.create(name, email, password, confirmPassword);
 

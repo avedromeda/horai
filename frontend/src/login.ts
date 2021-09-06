@@ -8,15 +8,17 @@ function welcomeToLogin() {
     $("#login-screen").removeClass("d-none");
 }
 
-
-function loginToMain() {
+function loginToEmailVerify() {
     $("#login-screen").addClass("d-none");
+    $("#email-screen").removeClass("d-none");
+}
+
+function emailToMain() {
+    $("#email-screen").addClass("d-none");
     $("#main-content").removeClass("d-none");
 }
 
 export async function setupAndGetClient(): Promise<Client> {
-    $("#register-error").hide();
-    $("#login-error").hide()
     // Setup events for welcome and login screen
     if (document.cookie.indexOf("welcomed=") > -1) {
         welcomeToLogin();
@@ -32,20 +34,29 @@ export async function setupAndGetClient(): Promise<Client> {
     try {
         // Is already logged-in?
         await client.api.auth.me();
-        // Yes
-        loginToMain();
-        return client;
     } catch (e) {
-        // Auth did not work. Go through login.
+        // Auto auth did not work. Go through login.
         if (e instanceof APIError) {
             await handleLoginOrRegister(client);
-            loginToMain();
-            return client;
         }
     }
+
+    // Yes
+    loginToEmailVerify();
+
+    if (!client.api.auth.dataMe.verified_email) {;
+        await handleEmailVerification(client);
+    }
+
+    emailToMain();
+
+    return client;
+
 }
 
 function handleLoginOrRegister(client: Client): Promise<Client> {
+    $("#register-error").hide();
+    $("#login-error").hide()
     return new Promise((resolve, reject) => {
         $("#login-button").on("click", async (event) => {
             try {
@@ -85,4 +96,30 @@ function handleLoginOrRegister(client: Client): Promise<Client> {
             }
         });
     })
+}
+
+function handleEmailVerification(client: Client) {
+    $("#email-error").hide();
+    return new Promise((resolve, reject) => {
+        $("#logout-email-verification").on("click", async () => {
+            await client.logout();
+            location.reload();
+        });
+
+        $("#send-email-verification").on("click", async () => {
+            try {
+                await client.sendVerificationEmail();
+                $("#email-info").text("An email was sent at {0}".formatUnicorn((new Date()).toLocaleString()))
+
+                document.cookie = "token=; Secure;";
+            } catch (e) {
+                if (e instanceof APIError) {
+                    $("#email-error").text(e.message.error).show()
+                    setTimeout(() => {
+                        $("#email-error").hide()
+                    }, 3000);
+                }
+            }
+        });
+    });
 }

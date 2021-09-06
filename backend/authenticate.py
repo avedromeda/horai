@@ -19,6 +19,24 @@ def gen_auth_token(user_id: int, expire_time: float = 0) -> str:
     )
 
 
+def gen_email_verif_token(user_email: str, expire_time: float = 0) -> str:
+    if expire_time == 0:
+        expire_time = time.time() + 24 * 60 * 60 * 31
+    
+    return jwt.encode(
+        {"sub": user_email, "exp": expire_time}, current_app.config.get("JWT_SECRET"), algorithm="HS256"
+    )
+
+
+def check_email_token(token: str) -> str:
+    try:
+        result = jwt.decode(token, current_app.config.get("JWT_SECRET"), algorithms=["HS256"])
+    except (InvalidTokenError, InvalidSignatureError, ExpiredSignatureError):
+        return None
+    else:
+        return result.get("sub")
+
+
 def check_auth_token(token: str) -> int:
     try:
         result = jwt.decode(token, current_app.config.get("JWT_SECRET"), algorithms=["HS256"])
@@ -35,6 +53,7 @@ def check_auth_token(token: str) -> int:
 
 from . import app
 
+
 # Setup pre-request filters
 @app.before_request
 def user_auth_check():
@@ -47,9 +66,22 @@ def is_authenticated(f):
     def decorated(*args, **kwargs):
         if g.user is None:
             return {"error": "You must be authenticated to do this"}, 403
+        elif not g.user.verified_email:
+            return {"error": "You must have validated your email to do this"}, 401
         
         return f(*args, **kwargs)
     return decorated
+
+
+def is_authenticated_not_verified(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if g.user is None:
+            return {"error": "You must be authenticated to do this"}, 403
+        
+        return f(*args, **kwargs)
+    return decorated
+
 
 
 def is_premium(f):
