@@ -1,7 +1,7 @@
 {
   "name": "horai",
   "description": "Planner and note taking app designed for mobile and desktop.",
-  "version": "0.3.0-rc.2",
+  "version": "0.3.0",
   "scripts": {
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
