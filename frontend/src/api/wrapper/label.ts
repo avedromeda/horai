@@ -1,8 +1,8 @@
 import API from "../api";
-import { ILabel } from "../label";
+import { ILabel, ILabelProps } from "../label";
 import APIObject from "./object";
 
-export default class Label extends APIObject {
+export default class Label extends APIObject<ILabelProps, ILabel> {
     data: ILabel;
     constructor (api: API, data: ILabel) {
         super(api);

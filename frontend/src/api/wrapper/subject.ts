@@ -1,12 +1,12 @@
 import API from "../api";
 import { INoteProps } from "../note";
-import { ISubject } from "../subject";
+import { ISubject, ISubjectProps } from "../subject";
 import Note from "./note";
 import APIObject from "./object";
 
 
 
-export default class Subject extends APIObject {
+export default class Subject extends APIObject<ISubjectProps, ISubject> {
     data: ISubject;
     constructor (api: API, data: ISubject) {
         super(api);

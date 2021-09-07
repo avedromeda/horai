@@ -1,11 +1,11 @@
 import API from "../api";
-import { INote } from "../note";
+import { INote, INoteProps } from "../note";
 import Label from "./label";
 import APIObject from "./object";
 import Subject from "./subject";
 
 
-export default class Note extends APIObject {
+export default class Note extends APIObject<INoteProps, INote>{
     data: INote;
     subject: Subject;
     constructor (api: API, subject: Subject, data: INote) {

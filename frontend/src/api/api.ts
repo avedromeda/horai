@@ -1,5 +1,6 @@
 import APIAuth from "./auth";
 import APIError from "./error";
+import APIEvents from "./events";
 import APILabel from "./label";
 import APINote from "./note";
 import APISubject from "./subject";
@@ -13,11 +14,13 @@ export default class API {
     subject: APISubject;
     note: APINote;
     label: APILabel;
+    event: APIEvents;
     constructor() {
         this.auth = new APIAuth(this);
         this.subject = new APISubject(this);
         this.note = new APINote(this);
         this.label = new APILabel(this);
+        this.event = new APIEvents(this);
     }
 
     async createRequest(route: string, method: string, body?: BodyInit) {

@@ -2,7 +2,8 @@ import API from "../api";
 import { IUser } from "../auth";
 import APIObject from "./object";
 
-export default class User extends APIObject {
+// No props yet
+export default class User extends APIObject<IUser, null> {
     data: IUser;
     constructor (api: API, data: IUser) {
         super(api);

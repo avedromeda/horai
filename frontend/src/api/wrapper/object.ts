@@ -1,6 +1,6 @@
 import APIChild from "../child";
 
-export default class APIObject extends APIChild {
+export default class APIObject<P, R> extends APIChild {
     data: any;
 
     path(): string {
@@ -19,15 +19,15 @@ export default class APIObject extends APIChild {
         return new Date(this.data.updated_on * 1000);
     }
 
-    async update() {
+    async update(newData?: P): Promise<R> {
         const response = await this.createObjectRequest(
             "PUT",
             this.createForm({
-                ...this.data
+                ...(newData ?? this.data)
             })
         )
 
-        const data = await this.validateResponse(response);
+        const data: R = await this.validateResponse(response);
         this.data = data;
         return data;
     }

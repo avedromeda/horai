@@ -1,13 +1,11 @@
 import Client from "./api/wrapper/client";
-import Note from "./api/wrapper/note";
-import Subject from "./api/wrapper/subject";
 import { Component } from "./components";
 import Editing, { addToolbarListener } from "./editor";
 
 
 const options = { weekday: "short", year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" } as const;
 
-export default class Horai {
+export default class HoraiNotes {
     currentSubjectId: number;
     currentNoteId: number;
 
