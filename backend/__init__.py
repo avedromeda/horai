@@ -30,7 +30,7 @@ def create_app(config="config.py"):
     db.create_all()
 
     # Load blueprints
-    from backend.views import label, note, subject, user
+    from backend.views import label, note, subject, user, events
 
     app.register_blueprint(user.bp, url_prefix="/api/user/")
 
@@ -40,6 +40,8 @@ def create_app(config="config.py"):
     api.add_resource(note.NoteResource, "/api/subject/<int:subject_id>/note/<int:note_id>/")
     api.add_resource(label.LabelList, "/api/labels/")
     api.add_resource(label.LabelResource, "/api/label/<int:label_id>/")
+    api.add_resource(events.EventList, "/api/events/")
+    api.add_resource(events.EventResource, "/api/event/<int:label_id>/")
 
     root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "frontend")
 

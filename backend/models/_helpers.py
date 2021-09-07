@@ -1,3 +1,4 @@
+from backend.models.planner import Event
 from backend.models.notes import Label, Note
 from flask import g
 from flask_restful import abort
@@ -43,3 +44,15 @@ def abort_for_label(label_id: int):
         abort(403, message=f"This is not your label")
     
     abort(404, message=f"Label {label_id} does not exist.")
+
+
+def abort_for_event(event_id: int):
+    event = Event.query.get(event_id)
+    if event:
+        # Ensure owner
+        if event.user == g.user or g.user.admin_features:
+            return event
+        
+        abort(403, message=f"This is not your event")
+    
+    abort(404, message=f"Event {event_id} does not exist.")
