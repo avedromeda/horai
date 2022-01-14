@@ -5,7 +5,7 @@ import APINote from "./note";
 import APISubject from "./subject";
 
 
-const API_ENDPOINT = "https://horai.yadamiel.com/api/"
+const API_ENDPOINT = "https://horai.avedromeda.xyz/api/"
 
 
 export default class API {

@@ -16,6 +16,6 @@ SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
 DEFAULT_EMAIL_VERIF_CONTENT = """
 Welcome to Horai, to verify your email please click on the following link (temporarily valid)
 
-https://horai.yadamiel.com/api/user/verify?token={token}
+https://horai.avedromeda.xyz/api/user/verify?token={token}
 """
 EMAIL_VERIF_CONTENT = os.getenv("EMAIL_VERIF_CONTENT", DEFAULT_EMAIL_VERIF_CONTENT)
